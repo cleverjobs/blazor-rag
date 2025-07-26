@@ -1,0 +1,7 @@
+# TelerikGrid drag and drop between grids does not fire OnRowDrop for destination grid
+
+## Question
+
+**Chr** asked on 05 Jun 2024
+
+I'm trying to use TelerikGrid to drag and drop items from subgrid to subgrid (Using another TelerikGrid in the DetailTemplate). I have gotten it to work well when moving rows around the same grid, but it doesn't work when I try to drag from one grid to another. The event only fires for the source grid and not the destination grid, whereas the documentation says it should fire for both. I'm not sure whether I'm doing something wrong or if this function just doesn't work if the two grids don't have the same parent component. Here's a sample of my code: <TelerikGrid Data=@_items Height=@GetHeightValue() Width=@GetWidthValue() FilterMode="@GridFilterMode.FilterMenu" Pageable=@Pageable PageSize=@(PageSize?? DefaultPageSize ) OnRowClick="@OnRowClick" DetailTemplate="@GetGridDetailContent()" RowDraggable=@RowDraggable OnRowDrop="@((GridRowDropEventArgs<DataType> args)=> OnRowDropHandler(args))" @ref=@_grid> <GridSettings> <GridRowDraggableSettings DragClueField="@nameof(DataType.Name)"> </GridRowDraggableSettings> </GridSettings> In this case GetGridDetailContent() returns another component of the same type to be able to display three levels of hierarchical data. Am I missing anything, or does this just not work unless, like in the examples, both grids are part of the same component?

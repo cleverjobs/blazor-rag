@@ -1,0 +1,19 @@
+# Performance tips on filtering larger grid data sets?
+
+## Question
+
+**Eri** asked on 05 Nov 2019
+
+Any tips to maximize performance of filtering larger data sets? In my testing I am experiencing lag when filtering (gif available at [https://raw.githubusercontent.com/austineric/Misc/master/Demo.gif).](https://raw.githubusercontent.com/austineric/Misc/master/Demo.gif).) In the gif example: GridDataSource is IEnumerable<TechnicanDataEntryExtension> GridDataSource holds 500,000 records I am typing the word "hearing" I am running the the app locally from visual studio so web server latency isn't involved, I would expect lag to be worse there <TelerikGrid Data="@GridDataSource" OnUpdate="@UpdateHandler" OnDelete="@DeleteHandler" Class="cst-grid" FilterMode="@GridFilterMode.FilterRow" EditMode="@GridEditMode.Inline" Sortable="true" SelectionMode="@GridSelectionMode.Single" Pageable="true" PageSize="10"> <GridColumns> <GridCommandColumn Width="120px;"> <GridCommandButton Command="Edit" Class="cst-grid-command-button">Edit</GridCommandButton> <GridCommandButton Command="Save" ShowInEdit="true" Class="cst-grid-command-button">Save</GridCommandButton> <GridCommandButton Command="Cancel" ShowInEdit="true" Class="cst-grid-command-button">Cancel</GridCommandButton> <GridCommandButton Command="Delete" Class="cst-grid-command-button">Delete</GridCommandButton> </GridCommandColumn> <GridColumn Field="@nameof(GridModel.RowID)" Editable="false" Width="0" /> <GridColumn Field="@nameof(GridModel.EntryDate)" Title="Entry Date" Editable="false" /> <GridColumn Field="@nameof(GridModel.UserID)" Editable="false" Width="0" /> <GridColumn Field="@nameof(GridModel.Username)" Editable="false" /> <GridColumn Field="@nameof(GridModel.Category)"> <EditorTemplate> @{ CurrentlyEditedRow=(TechnicianDataEntryExtension)context; <select class="form-control" @bind="@CurrentlyEditedRow.Category"> @{ foreach (Categories Category in CategoryDropdownDataSource) { if (CurrentlyEditedRow.Category==Category.Category) { <option value="@Category.Category" selected="selected">@Category.Category</option> } else { <option value="@Category.Category">@Category.Category</option> } } } </select> } </EditorTemplate> </GridColumn> <GridColumn Field="@nameof(GridModel.SerialNumber)"> <EditorTemplate> @{ CurrentlyEditedRow=(TechnicianDataEntryExtension)context; <input class="form-control" @bind-value="CurrentlyEditedRow.SerialNumber" maxlength="10" /> } </EditorTemplate> </GridColumn> </GridColumns> </TelerikGrid> I can implement workarounds to decrease the number of records in the grid but in the event where I need to give it larger numbers of records are there any best practices or recommendations to minimize filter lag?
+
+## Answer
+
+**Marin Bratanov** answered on 07 Nov 2019
+
+Hi Eric, Keeping such a huge data collection in memory for every circuit is going to tax the server heavily. It is its processing that is slow and creates a lag in the SignalR messages. You can monitor them in the Messages tab of the SignalR connection and compare how fast they come back when you have 500k records vs something manageable like, let's say, 500 records. You can use the first sample here to test that easily. On my end I can see a definite lag when the data set is large and it is this lag that causes problems (including this problem ). In this case the latency is not caused by the network, but there is a latency nonetheless. In the case of the simple model from the article above, 500k records cost about 200MB of memory, so traversing and filtering that will cost some server resources. What I can suggest you look into is performing the data source operations (including filtering) with your own code through the OnRead event, so you only fetch a page of records from the data source, and not the entire data source. Regards, Marin Bratanov
+
+### Response
+
+**Eric** answered on 07 Nov 2019
+
+Great resources, thank you. I will see what I can do.

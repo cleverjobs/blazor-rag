@@ -1,0 +1,29 @@
+
+# Rendering Changes in 3.4.0
+
+## "k-state" CSS classes
+
+Previous to the 3.4.0 version we used `k-state-*` CSS classes to denote that the state of an HTML element happened. As part of the 3.4.0 release, we remove the `state` segment of that classes.
+
+>caption A list of all changed "k-state" classes
+
+| Pre-3.4.0 | 3.4.0 |
+|------------------|------------|
+| k-state-focus | k-focus |
+| k-state-focused | k-focused |
+| k-state-hover | k-hover |
+| k-state-hovered | k-hovered |
+| k-state-selected | k-selected |
+| k-state-disabled | k-disabled |
+| k-state-invalid | k-invalid |
+| k-state-active | k-active |
+
+## Dialog
+
+* Added `k-dialog-wrapper` CSS class to the outermost HTML element, which holds the modal overlay and the dialog instance.
+* Removed the `k-centered` CSS class from the `<div class="k-window k-dialog">`.
+
+## See also
+
+* [Use best practices when overriding theme styles](slug:themes-override#best-practices)
+

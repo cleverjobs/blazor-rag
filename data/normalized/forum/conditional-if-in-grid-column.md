@@ -1,0 +1,25 @@
+# Conditional IF in Grid Column
+
+## Question
+
+**Ric** asked on 06 Jun 2019
+
+Hi all, New to Blazor and Web development in General, but using Blazor as a way to bridge the gap between my c# knowledge and the web. Just wondering if anyone has any knowledge of being able to do a if inside a Grid Column The end goal i'm trying to achieve is if a value is contained within the the property of the CurrentRecord then a button will appear binding to a function, if no record appears then the cell would remain empty. this is the code i'm bodged together <TelerikGrid data="@Histories" height="600px" Pageable="true" PageSize="20" Sortable="true" Filterable="true"> <TelerikGridColumns> <TelerikGridColumn Field="Casecode" /> <TelerikGridColumn Field="Historytext" /> <TelerikGridColumn Field="Createdate" Title="Create Date" /> <TelerikGridColumn> <Template> @{ CurrentRecord=context as CaseHistory; if(CurrentRecord.Blobid> 0) { <TelerikButton>Open</TelerikButton> } } </Template> </TelerikGridColumn> </TelerikGridColumns> </TelerikGrid> at the moment when i'm running the code the command brower is showing an error Error: System.ArgumentNullException: Value cannot be null. Parameter name: name at System.Type.GetProperty(String name, BindingFlags bindingAttr) at Telerik.Blazor.Components.Grid.TelerikGridFilterHeaderBase`1.get_PropInfo() at Telerik.Blazor.Components.Grid.TelerikGridFilterHeaderBase`1.get_PropType() at Telerik.Blazor.Components.Grid.TelerikGridFilterHeaderBase`1.get_PropTypeName() at Telerik.Blazor.Components.Grid.TelerikGridFilterHeaderBase`1.ResetFilterText() at Telerik.Blazor.Components.Grid.TelerikGridFilterHeaderBase`1.OnInit() at Microsoft.AspNetCore.Components.ComponentBase.RunInitAndSetParametersAsync() any help to point me in a direction would help. Thanks Richard
+
+## Answer
+
+**Richard** answered on 06 Jun 2019
+
+Fixed the issue after taking a break from looking at it. i had to Bind the column to the property, before using the template to check if the data existed which showed the button. <TelerikGrid data="@Histories" height="600px" Pageable="true" PageSize="20" Sortable="true" Filterable="true"> <TelerikGridColumns> <TelerikGridColumn Field="Casecode" /> <TelerikGridColumn Field="Historytext" /> <TelerikGridColumn Field="Createdate" Title="Create Date" /> <TelerikGridColumn Field="Blobid"> <Template> @{ CurrentRecord=context as CaseHistory; if(CurrentRecord.Blobid>=1) { <TelerikButton>Open</TelerikButton> } } </Template> </TelerikGridColumn> </TelerikGridColumns> </TelerikGrid>
+
+### Response
+
+**Marin Bratanov** answered on 06 Jun 2019
+
+Hi Richard, As you just found (I almost sent this before seeing your post), a Field is required at the moment. If the actual model does not have a field for every templated column, you could use a view model that inherits the actual model and adds fields for all columns that are needed. Below is an example how you can do this without a field (I highlighted the key changes): I use a local variable in the template to prevent it from keeping old values in the global scope. I recommend you take this approach in any case. I disabled filtering on that column, because it does not have a Field, so it could not be filtered. I am also logging this exception for fixing, if the column does not have a field, it should not throw, but simply not be filterable/sortable/... and you can track its status by clicking the Follow button here: [https://feedback.telerik.com/blazor/1412128-filterable-column-without-field-throws-a-null-exception.](https://feedback.telerik.com/blazor/1412128-filterable-column-without-field-throws-a-null-exception.) @using Telerik.Blazor.Components.Grid @using Telerik.Blazor.Components.Button <TelerikGrid data="@Histories" height="600px" Pageable="true" PageSize="20" Sortable="true" Filterable="true"> <TelerikGridColumns> <TelerikGridColumn Field="Casecode" /> <TelerikGridColumn Field="Historytext" /> <TelerikGridColumn Field="Createdate" Title="Create Date" /> <TelerikGridColumn Filterable="false"> <Template> @{ var CurrentRecord=context as CaseHistory; if (CurrentRecord.Blobid> 0) { <TelerikButton OnClick="@(()=> MyCustomCommand(CurrentRecord))">Open</TelerikButton> } } </Template> </TelerikGridColumn> </TelerikGridColumns> </TelerikGrid> @result @functions { public class CaseHistory { public int Id { get; set; } public int Casecode { get; set; } public string Historytext { get; set; } public DateTime Createdate { get; set; } public int Blobid { get; set; } } IEnumerable<CaseHistory> Histories=Enumerable.Range(1, 50).Select(x=> new CaseHistory { Id=x, Casecode=x, Historytext="text " + x, Createdate=DateTime.Now.AddDays(-x), Blobid=(x % 3==0) ? x : -x }); string result { get; set; } void MyCustomCommand(CaseHistory itm) { result=$ "custom command fired for {itm.Id} on {DateTime.Now}"; StateHasChanged(); } } Regards, Marin Bratanov
+
+### Response
+
+**Richard** answered on 06 Jun 2019
+
+Thank you for the quick response and the detailed answer, helps me better understand it all. Thanks Rich

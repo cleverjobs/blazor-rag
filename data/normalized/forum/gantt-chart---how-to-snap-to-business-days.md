@@ -1,0 +1,19 @@
+# Gantt chart - How to snap to (business) days?
+
+## Question
+
+**Len** asked on 15 Jul 2022
+
+Hi, I'm trying to figure out the range snapping when dragging a task in the Gantt timeline. I'm looking to implement a method to snap the task to the start of the day and not show any hours or minutes when dragging the start or end of the task. Is there a way to customize the tooltip shown while dragging a task? (circled in red in the following screenshot) I noticed the RangeSnapTo setting for the Gantt in the API reference, but that had no effect on the snapping behavior when dragging the task, or when dragging the start or end of the task. Am I missing something here? The actual effect I'm trying to achieve is snapping to business days, so Saturdays and Sundays are ignored, but still visible as days in the Gantt chart. Any tips on how to achieve such behavior? Kind Regards!
+
+### Response
+
+**Nadezhda Tacheva** commented on 20 Jul 2022
+
+Hi Lennert, As far as I can understand the desired scenario actually targets three requests (please advise if I am missing something): When dragging tasks in the timeline to allow dropping the tasks only at the start of the day and not in the middle. basically, the task to take whole days regardless of the time it starts/ends. Similar to the behavior in this demo of the Gantt version in Angular. Ability to customize the Toolbar visible when dragging and resizing tasks. Prevent the task drop on weekends - allow the user drag tasks only on workdays but still display the weekends in the timeline. I've raised a discussion for all these concerns, so we can consider them with the team. I will get back to you to provide details as soon as possible. Thank you for your patience in the meantime! Side note: The RangeSnapTo setting targets the starting point of the Gantt Timeline view. More details on that you can find in the Zoom for the Gantt Timeline article.
+
+## Answer
+
+**Nadezhda Tacheva** answered on 21 Jul 2022
+
+Hi Lennert, Thank you once again for your patience! I was able to revise your requests with the team. Please see my comments on the relevant points as follows: Drag task to the start of the day By default, tasks can be dragged and resized by hours and minutes and currently it is not possible to customize the drag/resize step, so it can target whole days. However, we do consider that a valid enhancement, so I logged a feature request for it on your behalf. You may find it in our public portal here: Ability to customize the drag/drop and resize step of the Gantt Timeline tasks I added your vote there to increase the popularity of the item. This is an important metrics that we track in order to prioritize the component enhancements. As creator of the post, you are automatically subscribed and will receive email notifications on status updates. This is the best way to keep in track with the progress of the feature as once we schedule it for specific release, we will update its label and you will be notified via email accordingly. Customize Tooltip We currently have Tooltip Template that allows customization of the Tooltip visible on task hover. However, there is indeed no option to customize the content of the Tooltip visible while dragging and resizing tasks. This is also a valid feature - I opened a request for it and added your vote, too: Ability to customize the Tooltip visible while dragging and resizing tasks in the Timeline Drag tasks to business days only Once you are able to control the drag step, so the user can snap the tasks to the beginning of the day, you can easily restrict them from dropping the tasks on weekends. You can handle the OnUpdate event of the Gantt and only update the data if the user drops the task on valid day (workday in your desired scenario). I hope you will find the above information useful. Please let me know if further question are raised. Regards, Nadezhda Tacheva Progress Telerik

@@ -1,0 +1,13 @@
+# How can I get a grid column to sort by the displayed text (via a template) and not the underlying value?
+
+## Question
+
+**TomTom** asked on 03 Nov 2021
+
+I have a grid with a column that has department code as its data. I use templates to display the actual department name in the grid and for editing, grouping, and filtering. When I sort the column, it sorts it by the department code and not the displayed department name. How can I get it to sort by the department name and not the department code? <GridColumn Field="DeptCode" Width="200px" title="Department" Editable="CurrentUser.IsAdmin"> <EditorTemplate> @{ CurrentlyEditedRecord=context as Data.InvRecord; <TelerikDropDownList Data="@Departments" @bind-Value="@CurrentlyEditedRecord.DeptCode" TextField="DeptNameFull" ValueField="DeptCode" Width="100%" PopupHeight="50%"> </TelerikDropDownList> } </EditorTemplate> <Template> @{ // a Template is used to show the foreign key data that is user-friendly string DepartmentCode=(string)(context as Data.InvRecord).DeptCode; CIEData.EntityClasses.VaiDepartmentEntity matchingPos=Departments.FirstOrDefault(r=> r.DeptCode==DepartmentCode); string textToRender=matchingPos !=null ? matchingPos.DeptNameFull : "Unknown"; <text>@textToRender</text> } </Template> <GroupHeaderTemplate> @{ string Id=(string)context.Value; CIEData.EntityClasses.VaiDepartmentEntity matchingPos=Departments.FirstOrDefault(r=> r.DeptCode==Id); string textToRender=matchingPos !=null ? matchingPos.DeptNameFull : "Unknown"; <text>@textToRender</text> } </GroupHeaderTemplate> <FilterMenuTemplate> <div class="filterTemplate"> @foreach (var x in Departments) { <div> <TelerikCheckBox Value="@(context.FilterDescriptor.FilterDescriptors.Select(f=> (f as FilterDescriptor).Value).ToList().Contains(x.DeptCode))" TValue="bool" ValueChanged="@((value)=> UpdateCheckedDeptStatus(value, x.DeptCode, context))" Id="@($"dept_{x.DeptCode}")"> </TelerikCheckBox> <label for="@($"dept_{x.DeptCode}")"> @if (x==null) // part of handling nulls - show meaningful text for the end user { <text>Empty</text> } else { @x.DeptNameFull } </label> </div> } </div> </FilterMenuTemplate> </GridColumn>
+
+## Answer
+
+**Marin Bratanov** answered on 04 Nov 2021
+
+Hi Tom, The grid sorts, filters, groups, edits based on the Field of the column. Thus, to sort by a certain field, you must set that to the Field parameter. If you cannot do that for some reason, you can implement the desired operation with your own custom logic by handling the OnRead event so you can provide the data to the grid according to your application's custom rules. You can read more about this approach here. Regards, Marin Bratanov

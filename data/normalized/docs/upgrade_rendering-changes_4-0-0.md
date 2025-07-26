@@ -1,0 +1,234 @@
+
+# Rendering Changes in 4.0.0
+
+* [Calendar](#calendar)
+* [Card](#card)
+* [ChunkProgressBar](#chunkprogressbar)
+* [(Common) Date Pickers](#common-for-date-pickers)
+* [(Common) Selects](#common-for-selects)
+* [Dialog](#dialog)
+* [Editor](#editor)
+* [FileSelect](#fileselect)
+* [Filter](#filter)
+* [Form](#form)
+* [Gantt](#gantt)
+* [Grid](#grid)
+* [ListView](#listview)
+* [MultiSelect](#multiselect)
+* [Notification](#notification)
+* [Pager](#pager)
+* [ProgressBar](#progressbar)
+* [Splitter](#splitter)
+* [Toolbar](#toolbar)
+* [TreeList](#treelist)
+* [Upload](#upload)
+* [Window](#window)
+
+## Calendar
+
+The `<span class="k-calendar-nav-today k-today">` CSS class has been changed to a Flat button (`<button class="k-button k-calendar-nav-today k-button-flat k-rounded-md k-button-md k-button-flat-primary"><span class="k-button-text">Today</span></button>`).
+
+## Card
+
+The following classes related to the Telerik UI for Blazor Card component have been renamed:
+
+| Pre-4.0.0 | 4.0.0 |
+|------------------|------------|
+|`k-card-actions-start`|`k-actions-start`|
+|`k-card-actions-end`|`k-actions-end`|
+|`k-card-actions-center`|`k-actions-center`|
+|`k-card-actions-stretched`|`k-actions-stretched`|
+
+## ChunkProgressBar
+
+* Added the `k-chunk-progressbar` CSS class to the `<div class="k-progressbar>`.
+* Added the `k-progressbar-chunks` CSS class to the `<ul>` element.
+* Replaced the `k-item` class of the `<li>` elements with the `k-progressbar-chunk` class.
+
+## Common for Date Pickers
+
+* All date pickers that incorporate a calendar, namely, the DatePicker, DateTimePicker, DateRangePicker, and TimePicker, inherit the change of the `<span class="k-calendar-nav-today k-today">`CSS class to a Flat button.
+* Added the `k-[COMPONENT]-popup` class to the popup element of all date pickers, namely, the DatePicker, DateTimePicker, DateRangePicker, and TimePicker.
+
+## Common for Selects
+
+The `k-[COMPONENT]-popup` class has been added to the popup element of all components providing a selection option such as the AutoComplete, ColorPicker, ComboBox, DropDownList, MultiColumnComboBox, and MultiSelect.
+
+## Dialog
+
+* Added `k-rounded-md` to the buttons in the predefined dialogs.
+* Renamed the `k-window-actions` and `k-dialog-actions` classes to `k-window-titlebar-actions` and `k-dialog-titlebar-actions`.
+* Renamed the `k-window-action` and `k-dialog-action` classes to `k-window-titlebar-action` and `k-dialog-titlebar-action`.
+* Removed the `k-dialog-buttongroup` class from the `<div class="k-actions>`.
+* Added `k-actions-horizontal`, `k-window-actions`, and `k-dialog-actions` to `<div class="k-actions>`.
+
+## Editor
+
+* Added the `k-editor-window` class to all popups.
+* Added the `k-editor-toolbar` class to the Editor toolbar.
+
+## FileSelect
+
+* Upload `button` and `input` are no longer nested but are on one level wrapped inside a `<div class="k-upload-button-wrap">`.
+* Replaced `k-file-group-wrapper`, `k-file-invalid-group-wrapper`, `k-multiple-files-group-wrapper` and `k-multiple-files-invalid-group-wrapper` classes with `k-file-icon-wrapper` class.
+* Replaced `k-file-group` class with `k-file-icon`class.
+* Replaced `k-file-name-size-wrapper` class with `k-file-info` class.
+* Removed `k-file-name-invalid` class from `<span class="k-file-name">`.
+* Removed `k-text-success` and `k-text-error` classes from `<span class="k-file-validation-message">`.
+
+## Filter
+
+The `k-toolbar-item` class has been added to `<div class="k-filter-toolbar-item>`.
+
+## Form
+
+`k-form-{size}` has been added to the main wrapping element of the Telerik UI for Blazor Form component (`<form class="k-form">`). It's necessary to introduce the [`Size` options of the Form](slug:form-appearance).
+
+## Gantt
+
+* Added the `k-grid-md` class to the `<div class="k-grid>` element. This action ensures the default medium size of the Gantt tree.
+* Added `table`-specific classes to the `table` elements of the Gantt tree:
+
+| Prior to 4.0.0 | 4.0.0 and Later |
+|------------------|------------|
+| `<table>` | `<table class="k-table">` |
+| `<thead>` | `<thead class="k-table-thead">` |
+| `<tbody>` | `<tbody class="k-table-tbody">` |
+| `<tfoot>` | `<tfoot class="k-table-tfoot">` |
+| `<th>` | `<th class="k-table-th">` |
+| `<tr>` | `<tr class="k-table-row">` |
+| `<td>` | `<td class="k-table-td">` |
+| `<tr class="k-grouping-row">` | `<tr class="k-table-group-row">` |
+
+## Grid
+
+* Wrapped the sorting icon in a `<span class="k-sort-icon">` element.
+
+  ````HTML
+    <span class="k-sort-icon">
+          <span class="k-icon k-i-sort-asc-small"></span>
+    </span>
+  ````
+
+* Added `k-grid-{size}` to the main wrapping element of the component (`<div class="k-grid">`). It's necessary to introduce the [`Size` options of the Grid](slug:grid-sizing). The child elements inherit the `k-grid-{size}` class.
+
+* Added the `k-grid-header-table`, `k-grid-table`, and `k-grid-footer-table` Grid-specific classes to the header, body, and footer of the tables.
+
+* Added `table`-specific classes to the `table` elements of the Grid:
+
+| Prior to 4.0.0 | 4.0.0 and Later |
+|------------------|------------|
+| `<table>` | `<table class="k-table">` |
+| `<thead>` | `<thead class="k-table-thead">` |
+| `<tbody>` | `<tbody class="k-table-tbody">` |
+| `<tfoot>` | `<tfoot class="k-table-tfoot">` |
+| `<th>` | `<th class="k-table-th">` |
+| `<tr>` | `<tr class="k-table-row">` |
+| `<td>` | `<td class="k-table-td">` |
+| `<tr class="k-grouping-row">` | `<tr class="k-table-group-row">` |
+
+### Grid Grouping
+
+* Removed `<div class="k-indicator-container">` in favor of `<div class="k-chip>`. The `Group` value is now rendered in a `<span class="k-chip-content">`. The **Close** icon is now rendered in a `<span class="k-chip-actions">` container.
+* Changed the **Close** icon from `<span class="k-button-icon k-icon k-i-x"></span>` to `<span class="k-button-icon k-icon k-i-x-circle"></span>`.
+* Removed the `k-grouping-header-flex` class from the grouping header.
+* Renamed the class of the empty `<div class="k-indicator-container">` to `<div class="k-grouping-drop-container">`.
+
+## ListView
+
+The `<div class="k-listview-item">` wrapper has been added to the Item template.
+
+## MultiSelect
+
+* Added the `k-text-ellipsis` class to the `<span class="k-chip-label>` element.
+* Removed the `k-input-values` and `k-selection-multiple` classes from the `<div class="k-chip-list">` element.
+* Wrapped the `<div class="k-chip-list">` element in a `<div class="k-input-values">` container.
+
+## Notification
+
+* Removed the `<div class="k-notification-wrap">` element.
+* Replaced the closable Notification icon `<a class="k-icon k-i-x">` with a `<span class="k-icon k-i-x">`.
+* Wrapped the closable icon in a `<span class="k-notification-actions">` container.
+
+## Pager
+
+* Replaced `<ul class="k-pager-numbers">` with a `<div class="k-pager-numbers">`.
+* Replaced the `<a class="k-link k-page-nav">` navigation buttons with Flat buttons `<button class="k-pager-nav k-button k-button-{size} k-button-flat k-button-flat-base k-icon-button">`.
+* Replaced the `<span class="k-link>` page numbers with Flat primary buttons `<button class="k-button k-button-{size} k-button-flat k-button-flat-primary">`.
+* Removed the `k-floatwrap`, `k-link`, `k-pager-wrap`, and `k-label` classes.
+* Added `k-pager-{size}` to the main wrapping element of the component (`<div class="k-pager">`). It's necessary to introduce the [`Size` options of the Form](slug:pager-appearance).
+
+## ProgressBar
+
+* Added the `k-progressbar-progress` class to the `<div class="k-selected>` element.
+* Changed the inline style of the `<div class="k-progressbar>` from `--kendo-progressbar-progress` to `--kendo-progressbar-value`. The implemented style controls the progress width and height.
+
+## Splitter
+
+The `k-collapse-prev` and `k-collapse-next` classes have been removed from the `<span class="k-icon>` element.
+
+## Toolbar
+
+* Added the `k-toolbar-resizable` class to the main `<div class="k-toolbar>` wrapping element of the component. Applicable when the Toolbar is responsive.
+* Renamed the `k-overflow-anchor` class to `k-toolbar-overflow-button`.
+* Added Toolbar-specific classes to all built-in tools such as `k-toolbar-button`, `k-toolbar-toggle-button`, `k-toolbar-button-group`, and more.
+* All template items are now wrapped in a `<div class="k-toolbar-item">` element.
+* Added `k-toolbar-{size}` to the main `<div class="k-toolbar">` wrapping element of the component. It's necessary to introduce the [`Size` options of the Toolbar](slug:toolbar-appearance).
+
+## Treelist
+
+* Wrapped the sorting icon in a `<span class="k-sort-icon">` element.
+
+  ````HTML
+    <span class="k-sort-icon">
+        <span class="k-icon k-i-sort-asc-small"></span>
+    </span>
+  ````
+
+* Added the `k-grid-md` class to the `<div class="k-grid>` element. This implementation ensures the default medium size of the TreeList.
+
+* Added `table`-specific classes to the `table` elements of the TreeList:
+
+| Prior to 4.0.0 | 4.0.0 and Later |
+|------------------|------------|
+| `<table>` | `<table class="k-table">` |
+| `<thead>` | `<thead class="k-table-thead">` |
+| `<tbody>` | `<tbody class="k-table-tbody">` |
+| `<tfoot>` | `<tfoot class="k-table-tfoot">` |
+| `<th>` | `<th class="k-table-th">` |
+| `<tr>` | `<tr class="k-table-row">` |
+| `<td>` | `<td class="k-table-td">` |
+
+## Upload
+
+* The `button` and `input` of the Upload are no longer nested and are now siblings wrapped inside a `<div class="k-upload-button-wrap">`.
+* Removed the `k-header` class from `<div class="k-upload>`.
+* Added the `k-upload-async` class to `<div class="k-upload>`.
+* Added the `k-upload-dropzone` class to `<div class="k-dropzone">`.
+* Removed the `k-upload-status-total` class from `<div class="k-upload-status">`.
+* Removed the `k-reset` class from the `<ul class="k-upload-files">`.
+* Replaced `<div class="k-progressbar">` with a `<TelerikProgressBar>` component without visible labels.
+* Replaced the `k-file-group-wrapper`, `k-file-invalid-group-wrapper`, `k-multiple-files-group-wrapper`, and `k-multiple-files-invalid-group-wrapper` classes with the `k-file-icon-wrapper` class.
+* Replaced the `k-file-name-size-wrapper` class with the `k-file-info` class.
+* Removed the `k-text-success` and `k-text-error` classes from `<span class="k-file-validation-message">`.
+
+### Action Buttons
+
+The following changes are applicable when `AutoUpload = "false"`, so the **Clear** and **Upload** action buttons are rendered:
+
+* Added the `k-actions-horizontal` class to `<div class="k-actions>`.
+* Removed the `k-clear-selected` and `k-upload-selected` classes from the action buttons.
+* Added the `k-rounded-md` class to the action buttons.
+* Wrapped the buttons text in a `<span class="k-button-text">` element.
+
+## Window
+
+* Removed the `k-window-wrapper` class from `<div class="k-window>`.
+* Removed the `k-dialog-content` class from `<div class="k-window-content>`.
+* Removed the `k-dialog-titlebar` and `k-header` classes from `<div class="k-window-titlebar>`.
+* Renamed `k-window-actions` to `k-window-titlebar-actions`.
+* Renamed `k-window-action` to `k-window-titlebar-action`.
+
+## See Also
+
+* [Use best practices when overriding theme styles](slug:themes-override#best-practices)

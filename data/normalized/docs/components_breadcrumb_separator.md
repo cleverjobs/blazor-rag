@@ -1,0 +1,46 @@
+
+# Breadcrumb Separator
+
+The Breadcrumb component renders a [Telerik font icon](slug:common-features-icons) as a separator between its items. By default the separator icon is `chevron-right`.
+
+You can define a separator icon of your choice through the `SeparatorIcon` attribute of the `TelerikBreadcrumb`. It accepts an `object` with the [Telerik icon](slug:common-features-icons) name.
+
+Furthermore, you can take full control over the Separator rendering with the [SeparatorTemplate](slug:breadcrumb-templates#separatortemplate) the Breadcrumb component provides.
+
+>caption Change the default Breadcrumb Separator. The result from the snippet below.
+
+![Breadcrumb Separator Icon](images/breadcrumb-separator-example.png)
+
+````RAZOR
+@* This example demonstrates how to change the default Telerik icon used as a Breadcrumb Separator*@
+
+<TelerikBreadcrumb SeparatorIcon="@SvgIcon.CaretDoubleAltRight"
+                   Data="@Items">
+</TelerikBreadcrumb>
+
+@code {
+    public List<BreadcrumbItem> Items { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Items = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem { Text = "Home", Icon = SvgIcon.Home },
+            new BreadcrumbItem { Text = "Products"},
+            new BreadcrumbItem { Text = "Computer peripherals"},
+            new BreadcrumbItem { Text = "Keyboards"}
+        };
+    }
+
+    public class BreadcrumbItem
+    {
+        public string Text { get; set; }
+        public ISvgIcon Icon { get; set; }
+        public string Url { get; set; }
+    }
+}
+````
+
+## See Also
+
+* * [Live Demo: Breadcrumb Separator](https://demos.telerik.com/blazor-ui/breadcrumb/separator)

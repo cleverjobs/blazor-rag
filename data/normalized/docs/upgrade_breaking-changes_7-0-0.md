@@ -1,0 +1,96 @@
+
+# Breaking Changes in 7.0.0
+
+This article outlines the breaking changes in Telerik UI for Blazor version 7.0.0.
+
+## Common
+
+### .NET Support
+
+[.NET 7 is no longer supported](slug:system-requirements).
+
+### AutoComplete, ComboBox, MultiColumnComboBox, MultiSelect
+
+The obsolete `ClearButton` parameter is removed. Use `ShowClearButton` instead.
+
+## DateRangePicker
+
+* The [`ShowOtherMonthDays` parameter's default value](slug:daterangepicker-overview#daterangepicker-parameters) is changed to `false`.
+
+## DropDownButton
+
+* The [`ShowArrowButton` parameter's default value](slug:dropdownbutton-overview#dropdownbutton-parameters) is changed to `false`.
+
+## FileSelect
+
+* The obsolete method `OpenFileSelectAsync()` is removed. [Use `OpenSelectFilesDialog()`](slug:fileselect-overview#fileselect-reference-and-methods) instead.
+
+## Gantt
+
+* The [`Type` property of `GanttDependencyCreateEventArgs`](slug:gantt-dependencies-editing) changes from `int` to [`GanttDependencyType` enum](slug:telerik.blazor.ganttdependencytype).
+* The [dependency model class of the Gantt](slug:gantt-dependencies-databind) must use the `GanttDependencyType` enum for its `TypeField` property.
+
+## Grid
+
+* Columns with `Visible="false"` are editable by default in popup edit mode. To [disable editing of a hidden column, set `Editable="false"`](slug:grid-editing-popup) explicitly.
+* The obsolete `AutoFitColumn()` method is removed. [Use `AutoFitColumnAsync()`](slug:components/grid/columns/resize#autofit-columns) instead.
+* The obsolete `AutoFitColumns()` method is removed. Use `AutoFitColumnsAsync()` instead.
+* The obsolete `AutoFitAllColumns()` method is removed. Use `AutoFitAllColumnsAsync()` instead.
+* When using [grouping and `OnRead`](slug:components/grid/manual-operations#grouping-with-onread), casting `DataSourceResult.Data` to a list of objects (`.Cast<object>()`) is no longer needed.
+* [Components in some Grid templates require a `@key`](slug:grid-kb-using-components-in-templates) in order to display correct values after data operations like sorting, filtering, paging, and others.
+
+>caption Using custom components in Grid column templates up to version 6.2.0 and after version 7.0.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 6.2.0</th>
+<th>UI for Blazor 7.0.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="vertical-align:top">
+
+````RAZOR.skip-repl
+<GridColumn>
+    <Template>
+        @{ var dataItem = (GridModel)context; }
+        <ChildComponent />
+    </Template>
+</GridColumn>
+````
+
+</td>
+<td style="vertical-align:top">
+
+````RAZOR.skip-repl
+<GridColumn>
+    <Template>
+        @{ var dataItem = (GridModel)context; }
+        <ChildComponent @key="@dataItem" />
+    </Template>
+</GridColumn>
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+## TextArea
+
+* The obsolete parameter `AutoSize` is removed. Use [`ResizeMode="TextAreaResizeMode.Auto"`](slug:textarea-overview#textarea-parameters) instead of `AutoSize="true"`.
+
+## TreeList
+
+* Columns with `Visible="false"` are editable by default in popup edit mode. To [disable editing of a hidden column, set `Editable="false"`](slug:treelist-editing-popup) explicitly.
+* The obsolete `AutoFitColumn()` method is removed. [Use `AutoFitColumnAsync()`](slug:treelist-columns-resize#autofit-columns) instead.
+* The obsolete `AutoFitColumns()` method is removed. Use `AutoFitColumnsAsync()` instead.
+* The obsolete `AutoFitAllColumns()` method is removed. Use `AutoFitAllColumnsAsync()` instead.
+
+## Upload
+
+* The obsolete method `OpenFileSelectAsync()` is removed. [Use `OpenSelectFilesDialog()`](slug:upload-overview#upload-reference-and-methods) instead.
+
+## See Also
+
+* [Rendering changes in Telerik UI for Blazor 7.0.0](slug:rendering-changes-in-7-0-0)

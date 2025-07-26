@@ -1,0 +1,13 @@
+# (Blazor) Issues with Cascading Dropdownlists inside Grid
+
+## Question
+
+**Fre** asked on 10 Jan 2025
+
+Blazor, .net 6.0, Telerik.UI.for.Blazor 5.1.1 I have a Blazor app with a page that contains a TelerikGrid (using inline edit) with 2 columns that use TelerikDropDownList that cascade. When no option is selected in the parent ddl, then the child ddl has no items and is disabled (enabled=false). When an item is chosen in the parent ddl, then the child ddl has its list of options updated. However, the child ddl is not refreshing until the user clicks somewhere in the row being edited. Once clicking anywhere in the row, then the child ddl displays properly: 1) becomes enabled, 2) contains the new list, 3) wipes out any previously selected value. Other than that initial refresh, the code works. It saves, it updates the child options, etc. No matter what I do, I cannot seem to get it refresh the child ddl without first clicking on the row. I have all different combinations of HasStateChanged(), ddl.Rebind(), ddl.Refresh(), ddl.DropDownList_Focus(). None of these seem to have made a difference. Below is the relevant code portions. <GridColumn Title="Module" Field="ModuleId" Visible="isFileLocationRequired"> <EditorTemplate> @{ var editingFileType=context as FileType; <TelerikDropDownList Data="@SelectableModules" TextField="TextValue" ValueField="FieldId" @bind-Value="editingFileType.ModuleId" OnChange="UpdateSelectableFileLocations"> </TelerikDropDownList> } </EditorTemplate> </GridColumn> <GridColumn Title="File location name" Field="FileLocationId" Visible="isFileLocationRequired"> <EditorTemplate> @{ var editingFileType=context as FileType; <TelerikDropDownList Data="@SelectableFileLocations" TextField="FileLocationName" ValueField="FileLocationId" @bind-Value="editingFileType.FileLocationId" Enabled="@editingFileType.ModuleId.HasValue"> </TelerikDropDownList> } </EditorTemplate> </GridColumn> private List <FileLocations> SelectableFileLocations=new (); private List <FieldOptions> SelectableModules=new (); private void UpdateSelectableFileLocations ( object input ) { int? moduleId=input as int?; SelectableFileLocations=FileLocations . Where ( fileLocation=> fileLocation. CategoryId==moduleId ) . ToList (); }
+
+## Answer
+
+**Dimo** answered on 14 Jan 2025
+
+Hi Fred, I tested the described scenario and it works as expected with versions 5.1.1 and the latest 7.1.0: [https://blazorrepl.telerik.com/GpOvPRwu47ISYYHy15](https://blazorrepl.telerik.com/GpOvPRwu47ISYYHy15) Please compare with your setup and send a similar example for inspection, if necessary. Regards, Dimo Progress Telerik

@@ -1,0 +1,67 @@
+
+# Rendering Changes in 4.6.0
+
+* [Icons](#icons)
+* [Carousel](#carousel)
+* [CheckBox](#checkbox)
+* [Filter](#filter)
+* [Form](#form)
+
+## Icons
+
+### Font Icons
+
+The font icon styles are detached from the component themes. Check section [Font Icon Stylesheet](slug:common-features-icons#font-icon-stylesheet) or KB article [Font Icons do not render in Telerik UI for Blazor 4.6](slug:icon-kb-font-icons-not-rendering) to see how to use font icons in your application after the 4.6.0 Telerik UI for Blazor release.
+
+### Changes in Icon Rendering
+
+The CSS classes applied to the built-in Font and SVG icons will be unified to include the `k-icon` CSS class.
+
+<table>
+<thead>
+<tr>
+<th>UI for Blazor 4.5.0</th>
+<th>UI for Blazor 4.6.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top">
+````RAZOR.skip-repl
+<span class="k-icon k-i-home"></span>
+<span class="k-svg-icon k-svg-i-home"></span>
+````
+</td>
+<td style="vertical-align:top">
+````RAZOR.skip-repl
+<span class="k-icon k-font-icon k-i-home"></span>
+<span class="k-icon k-svg-icon k-svg-i-home"></span>
+````
+</td>
+</tr>
+</tbody>
+</table>
+
+## Carousel
+
+* Added the `k-scrollview-animate` CSS class to the `<div class="k-scrollview-wrap">` element.
+* Replaced the `<a class="k-scrollview-prev">` and `<a class="k-scrollview-next">` with `<span class="k-scrollview-prev">` and `<span class="k-scrollview-next">`.
+
+## CheckBox
+
+Added a `<span class="k-checkbox-wrap">` element that wraps the `<input type="checkbox" class="k-checkbox" />`.
+
+## Filter
+
+Removed the `k-filter-toolbar-item` CSS class from the `<div class="k-toolbar-item">` element.
+
+## Form
+
+* Added the `k-form-label` CSS class to the `<label class="k-label">` element.
+* Added the `<div class="k-form-field-wrap">` that wraps the editors in the Form regardless of the Form Orientation.
+* Removed the `k-form-vertical` CSS class from the `<div class="k-form k-form-md">` element.
+* Replaced the `<label class="k-label k-form-label k-label-empty"></label>` element with `<span class="k-label k-form-label k-label-empty"></span>` when the `<FormItem LabelText=""></FormItem>`.
+
+## See Also
+
+* [Use best practices when overriding theme styles](slug:themes-override#best-practices)

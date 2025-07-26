@@ -1,0 +1,120 @@
+
+# AIPrompt Events
+
+This article explains the events available in the Telerik AIPrompt for Blazor:
+
+* [`OnPromptRequest`](#onpromptrequest)
+* [`OnCommandExecute`](#oncommandexecute)
+* [`OnOutputRate`](#onoutputrate)
+* [`PromptTextChanged`](#prompttextchanged)
+
+## OnPromptRequest
+
+The `OnPromptRequest` event fires when the user clicks on the **Generate** button within the Prompt view or retries a prompt from the Output view.
+
+The event handler receives an argument of type [`AIPromptPromptRequestEventArgs`](slug:Telerik.Blazor.Components.AIPromptPromptRequestEventArgs). See the [example below](#example).
+
+@[template](/_contentTemplates/common/parameters-table-styles.md#table-layout)
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Prompt` | `string` | The prompt text of the request. |
+| `Output` | `string` | The output of the request. The output is based on the prompt text. |
+| `IsCancelled` | `bool` | Whether the event is cancelled and the built-in action is prevented. |
+| `OutputItem` | `AIPromptOutputItemDescriptor` | The output item. This property will be populated only when the user retries an existing output. See [`AIPromptOutputItemDescriptor`](slug:Telerik.Blazor.Components.AIPromptOutputItemDescriptor). |
+
+> Do not use the `OnPromptRequest` event when [integrating the AIPrompt component with `Microsoft.Extensions.AI`](slug:common-features-microsoft-extensions-ai-integration). The `OnPromptRequest` event disables such integration.
+
+## OnCommandExecute
+
+The `OnCommandExecute` event fires when the user clicks on a command within the Commands view.
+
+The event handler receives an argument of type [`AIPromptCommandExecuteEventArgs`](slug:Telerik.Blazor.Components.AIPromptCommandExecuteEventArgs). See the [example below](#example).
+
+@[template](/_contentTemplates/common/parameters-table-styles.md#table-layout)
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Command` | `AIPromptCommandDescriptor` | The executed command. |
+| `Output` | `string` | The output based on the executed command. |
+| `IsCancelled` | `bool` | Whether the event is cancelled and the built-in action is prevented. |
+| `OutputItem` | `AIPromptOutputItemDescriptor` | The output item. This property will be populated only when the user retries an existing output. See [`AIPromptOutputItemDescriptor`](slug:Telerik.Blazor.Components.AIPromptOutputItemDescriptor). |
+
+## OnOutputRate
+
+The `OnOutputRate` event fires when the user rates an output.
+
+The event handler receives an argument of type [`AIPromptOutputRateEventArgs`](slug:Telerik.Blazor.Components.AIPromptOutputRateEventArgs). See the [example below](#example).
+
+@[template](/_contentTemplates/common/parameters-table-styles.md#table-layout)
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `OutputItem` | `AIPromptOutputItemDescriptor` | Specifies the output item that is being rated. See [`AIPromptOutputItemDescriptor`](slug:Telerik.Blazor.Components.AIPromptOutputItemDescriptor). |
+
+## PromptTextChanged
+
+The `PromptTextChanged` event fires when the user changes the prompt text. Use the event to update the AIPrompt's prompt when the `PromptText` parameter is set with one-way binding, otherwise, the user action will be ignored.
+
+## See Also
+
+## Example
+
+>caption Using AIPrompt events
+
+````RAZOR
+@* All AIPrompt events *@
+
+<TelerikAIPrompt OnPromptRequest="@OnPromptRequestHandler"
+                 OnCommandExecute="@OnCommandExecuteHandler"
+                 OnOutputRate="@OnOutputRateHandler"
+                 PromptChanged="@OnPromptChanged"
+                 ShowOutputRating="true"
+                 Prompt="@Prompt"
+                 Commands="@PromptCommands">
+</TelerikAIPrompt>
+
+@code {
+    private string Prompt { get; set; }
+
+    private List<AIPromptCommandDescriptor> PromptCommands { get; set; } = new List<AIPromptCommandDescriptor>()
+    {
+        new AIPromptCommandDescriptor() { Id = "1", Title = "Correct Spelling and grammar", Icon = SvgIcon.SpellChecker },
+        new AIPromptCommandDescriptor() { Id = "2", Title = "Change Tone", Icon = SvgIcon.TellAFriend,
+            Children = new List<AIPromptCommandDescriptor>
+            {
+                new AIPromptCommandDescriptor() { Id = "3", Title = "Professional" },
+                new AIPromptCommandDescriptor() { Id = "4", Title = "Conversational" },
+                new AIPromptCommandDescriptor() { Id = "5", Title = "Humorous" },
+                new AIPromptCommandDescriptor() { Id = "6", Title = "Empathic" },
+                new AIPromptCommandDescriptor() { Id = "7", Title = "Academic" },
+            }
+        },
+    };
+
+    private void OnPromptRequestHandler(AIPromptPromptRequestEventArgs args)
+    {
+        // The example uses dummy data intentionally. Replace the hard-coded string with a call to your AI API.
+        args.Output = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vel pretium lectus quam id leo in.";
+    }
+
+    private void OnCommandExecuteHandler(AIPromptCommandExecuteEventArgs args)
+    {
+        // The example uses dummy data intentionally. Replace the hard-coded string with a call to your AI API.
+        args.Output = "Nisl pretium fusce id velit ut tortor pretium. A pellentesque sit amet porttitor eget dolor. Lectus mauris ultrices eros in cursus turpis massa tincidunt.";
+    }
+
+    private void OnOutputRateHandler(AIPromptOutputRateEventArgs args)
+    {
+        // The example uses dummy data intentionally. Replace the hard-coded string with a call to your AI API.
+    }
+
+    private void OnPromptChanged(string prompt)
+    {
+        Prompt = prompt;
+    }
+}
+
+````
+
+* [Live Demo: AIPrompt Overview](https://demos.telerik.com/blazor-ui/aiprompt/overview)

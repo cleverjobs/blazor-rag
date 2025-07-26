@@ -1,0 +1,13 @@
+# Inconsistent text selection on tab focus
+
+## Question
+
+**TimTim** asked on 21 Sep 2023
+
+Summary When tabbing into an input, normally the text of the input is selected, allowing immediate entry of new text. However, when the NumericTextbox has a different display format than the edit format, the input text is selected briefly and then the selection is lost when the format is changed (for example, a dollar sign is removed from a currency format). This prevents text from being entered without further action from the user, such as manually selecting the text or moving the cursor. This may also impact WCAG 2.0 AA compliance. Steps to Reproduce Navigate to [https://demos.telerik.com/blazor-ui/numerictextbox/formats](https://demos.telerik.com/blazor-ui/numerictextbox/formats) Give the General Number Format input the focus. Press Tab to give the focus to the Currency Format input. Expected Results The Currency Format text should be selected and numeric text should be accepted. Actual Results The Currency Format text is not selected and the cursor is to the right of the text. If you try to enter a number, nothing will happen. To be able to enter text, the text must manually be selected or the cursor must be moved first. Notes You can see the expected behaviour by doing the following: Navigate to [https://demos.telerik.com/blazor-ui/numerictextbox/formats](https://demos.telerik.com/blazor-ui/numerictextbox/formats) Give the Currency Format input the focus. Press the Tab + Shift to give the focus to the General Number Format input. The General Number Format input text will now be selected and data entry works as expected. The correct behaviour can also be observed on the Telerik Form demo page: [https://demos.telerik.com/blazor-ui/form/overview](https://demos.telerik.com/blazor-ui/form/overview)
+
+## Answer
+
+**Hristian Stefanov** answered on 26 Sep 2023
+
+Hi Tim, Thank you for providing such a comprehensive explanation of what you are experiencing. Indeed, currently, the selection/Tabbing behavior of the NumericTextBox is inconsistent and prevents text from being entered without further action with a different display format. There is a need for improvement in that part of the behavior, I agree. That said, we already have an open public item for enhancement that will fix the inconsistency: Always highlight/select all content of the input on focus. I voted for this item as well on your behalf. The demand is high, which means that it can enter our short-term planning very soon. You can also subscribe to the item to receive email notifications for status updates. Regards, Hristian Stefanov Progress Telerik

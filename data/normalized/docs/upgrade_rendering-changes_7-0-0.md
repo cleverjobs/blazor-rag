@@ -1,0 +1,77 @@
+
+# Rendering Changes in 7.0.0
+
+* [AIPrompt](#aiprompt)
+* [Editor](#editor)
+* [Gantt](#gantt)
+* [Menu](#menu)
+* [PanelBar](#panelbar)
+* [PDFViewer](#pdfviewer)
+* [Signature](#signature)
+* [TabStrip](#tabstrip)
+* [TileLayout](#tilelayout)
+* [TreeList](#treelist)
+
+## AIPrompt
+
+1. The view buttons in the toolbar are now fully rounded (`k-rounded-md` class is replaced with `k-rounded-full`). The same applies to the `Generate` button.
+2. The output view, which contains the `<div class="k-card-list">` element, is now wrapped in a `<div>` element with class `k-prompt-view`.
+3. The copy button in the output view is now styled as primary.
+
+## Editor
+
+* The `<div class="k-form">` elements in the popups of the [`CreateLink` and `InsertImage` tools](slug:editor-built-in-tools) no longer render a `k-form-horizontal` class.
+* The `ViewHtml` tool popup no longer renders `div.k-form`, `div.k-form-field`, and `div.k-form-field-wrap` elements.
+* The `<label class="k-form-label">` elements in the above three popups also render a `k-label` class.
+* The popup windows (`<div class="k-window">` elements) for the `CreateLink` and `InsertImage` tools are `340px` wide by default.
+* The popup window for the `ViewHtml` tool is `500px` wide and `400px` high by default.
+
+## Gantt
+
+1. The `k-gantt-content` class is now applied to a `<div>` wrapper element that encloses the Gantt Splitter.
+2. The Splitter component class (`k-splitter` element) is now changed from `k-grid-content` to `k-grid-splitter`.
+3. The `<div class="k-gantt-tables">` element no longer includes the `k-user-select-none` class.
+4. The `<table class="k-gantt-rows">` element now also has a `k-grid-table` class.
+5. The `<span class="k-spacer">` element in the toolbar no longer has the `k-toolbar-spacer` class.
+6. The `<div class="k-gantt-views">` button group / select element is now wrapped in a `<div>` with class `k-gantt-views-wrapper`.
+
+## Menu
+
+1. The menu item elements (`<span class="k-link">`) no longer include the `k-in` class.
+2. The `<ul class="k-menu-group">` element no longer includes the `k-reset` and `k-group` classes.
+
+## PanelBar
+
+The `id` attribute of each PanelBar item (`<li class="k-panelbar-item">`) is changed from `tree-item-A_B_C_...` to `tree-item-Z`, where `A`, `B`, and `C` were the parent item's indexes, and `Z` is the current item's index within its own group and hierarchy level.
+
+## PDFViewer
+
+The `Open`, `Download` and `Print` tools have been moved to a submenu toggled on click of a hamburger menu on the leftmost side of the Toolbar.
+
+## Signature
+
+1. When maximized, the Signature now renders a `k-signature-maximized` class.
+2. The fill mode class is now applied based on the `FillMode` parameter (appearance settings).
+
+## TabStrip
+
+1. The active (currently selected) tabs now render only the `k-active` class. The `k-tab-on-top` class is no longer applied.
+2. The inactive tabs no longer include the `k-state-default` class.
+3. The scroll buttons (prev & next) now render the `k-tabstrip-prev` and `k-tabstrip-next` classes, respectively.
+4. The `k-pos-relative` class is no longer applied to the `<div class="k-tabstrip">` element. The component now receives an inline `position: relative` style instead.
+
+## TileLayout
+
+The tile elements (`<div class="k-tilelayout-item">`) render `tabindex="-1"` instead of `tabindex="0"` when the `Navigable` parameter of the TileLayout is `false`, which is the default setting.
+
+## TreeList
+
+1. The `k-cursor-pointer` class is removed from the `<span class="k-treelist-toggle">` element (toggle row icon).
+2. The `<table class="k-table">` element rendered in the `<div class="k-grid-header-wrap">` element now also has the `k-grid-header-table` class.
+3. The `<table class="k-table">` element rendered in the `<div class="k-grid-content">` element now also includes a size class (appearance settings).
+4. The `k-filterable` class in the table header cells is now rendered only when the column is filterable and has either a filter menu or column menu.
+
+## See Also
+
+* [Use best practices when overriding theme styles](slug:themes-override#best-practices)
+* [Breaking changes in Telerik UI for Blazor 7.0.0](slug:changes-in-7-0-0)

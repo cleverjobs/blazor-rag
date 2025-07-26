@@ -1,0 +1,13 @@
+# Documents.Flow.FormatProviders Error
+
+## Question
+
+**Ila** asked on 06 Jul 2022
+
+When trying to initialize Telerik.Windows.Documents.Flow.FormatProviders.Html.HtmlFormatProvider I'm getting : Error: System.IO.FileNotFoundException: Could not load file or assembly 'PresentationCore, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'. The system cannot find the file specified. File name: 'PresentationCore, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' at Telerik.Windows.Documents.Flow.FormatProviders.Html.GenericHtmlFonts..ctor() at Telerik.Windows.Documents.Flow.FormatProviders.Html.HtmlImportSettings..ctor() at Telerik.Windows.Documents.Flow.FormatProviders.Html.HtmlFormatProvider..ctor() Blazor Server What am I missing?
+
+## Answer
+
+**Lance | Senior Manager Technical Support** answered on 07 Jul 2022
+
+Hello Ilan, The "PresentationCore" is something that is a Windows dependency. This is a sign that you've accidentally installed the .NET Framework packages instead of the cross-platform .NET Standard 2.0 packages. Don't worry, this happens from time to time and is an easy fix. This documentation article explains it better and show you the exact names of the packages depending on your target platform=> NuGet Packages | Telerik Document Processing. Example Take a look at your project's installed NuGet packages for the Document Processing Libraries. You shouldn't see "Windows" in the name of any package. For example, I see you're attempting to use the Word processing library (i.e. the Documents.Flow packages) In a .NET Framework project, you would use: Telerik.Windows.Documents.Flow But for a .NET Core/.NET 5/.NET 6 project, you'd use: Telerik.Documents.Flow Notice how the .NET Framework package's name has "Windows" in the name. This is an easy giveaway as to what the package is built for. Solution So, the solution to the problem is to uninstall the Telerik.Windows.Documents.x packages and install the Telerik.Documents.x packages instead. Productivity Tip: In a Blazor project, you can right-click on the project head, select "Edit project file" and manually edit the package names to remove ".Windows". Once you save the csproj file, do a Rebuild. Note About Code Although the package names do not have the word "Windows in it, the actual namespace and object names itself still do. We have intentionally done this to have the widest combability and a very easy .NET Core migration path for projects coming from .NET Framework // This code will work everywhere Telerik.Windows.Documents.Flow.FormatProviders.Html.HtmlFormatProvider myProvider; Regards, Lance | Manager Technical Support

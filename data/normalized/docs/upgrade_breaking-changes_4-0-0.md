@@ -1,0 +1,425 @@
+
+# Breaking Changes in 4.0.0
+
+## Common Changes
+
+This section applies to changes to multiple components.
+
+## Icons
+
+Some [built-in icons](slug:common-features-icons#icons-list) have been renamed. See the full list of changes in article [New Icon Names in Telerik UI for Blazor 4.0](slug:icon-kb-new-names).
+
+### Icon
+
+The `Icon` parameter type changes from `string` to `object` to facilitate the addition of [Telerik Font and Svg Icons](slug:common-features-icons).
+
+To use built-in Telerik icons, [register the new icon namespaces](slug:common-features-icons#how-icons-work) - `Telerik.FontIcons` and/or `Telerik.SvgIcons`.
+
+To define custom icon classes inline, use `Icon="@( "my-icon-class" )"`.
+
+To use Telerik font icons with UI for Blazor 4.6.0 and above, [register `font-icons.css`](slug:common-features-icons#font-icon-stylesheet).
+
+<table>
+<thead><tr>
+<th>UI for Blazor 3.7.0</th>
+<th>UI for Blazor 4.0.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikButton Icon="save"> Font Icon Button </TelerikButton>
+
+<GridCommandButton Icon="save"> Font Icon Command Button </GridCommandButton>
+
+<TelerikButton IconClass="fa fa-foo"> Custom Icon Button </TelerikButton>
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikButton Icon="@SvgIcon.Save"> SVG Icon Button </TelerikButton>
+
+<GridCommandButton Icon="@SvgIcon.Save"> SVG Icon Command Button </GridCommandButton>
+
+<TelerikButton Icon="@( "fa fa-foo" )"> Custom Icon Button </TelerikButton>
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+### ImageUrl
+
+Removed the `ImageUrl` parameter, use the [Icon](#icon) parameter instead.
+
+List of affected components:
+
+* [Breadcrumb](slug:breadcrumb-overview)
+* [Button](slug:components/button/overview)
+* [ButtonGroup](slug:buttongroup-overview)
+* [ColorPicker](slug:colorpicker-overview)
+* [ContextMenu](slug:contextmenu-overview)
+* [Drawer](slug:drawer-overview)
+* [Menu](slug:components/menu/overview)
+* [PanelBar](slug:panelbar-overview)
+* [SplitButton](slug:splitbutton-overview)
+* [Stepper](slug:stepper-overview)
+* [ToggleButton](slug:togglebutton-overview)
+* [TreeView](slug:treeview-overview)
+* [Wizard](slug:wizard-overview)
+
+### IconClass
+
+Removed the `IconClass` parameter, use the [Icon](#icon) parameter instead.
+
+List of affected components:
+
+* [Breadcrumb](slug:breadcrumb-overview)
+* [Button](slug:components/button/overview)
+* [ButtonGroup](slug:buttongroup-overview)
+* [ColorPicker](slug:colorpicker-overview)
+* [ContextMenu](slug:contextmenu-overview)
+* [Drawer](slug:drawer-overview)
+* [Menu](slug:components/menu/overview)
+* [PanelBar](slug:panelbar-overview)
+* [SplitButton](slug:splitbutton-overview)
+* [Stepper](slug:stepper-overview)
+* [ToggleButton](slug:togglebutton-overview)
+* [TreeView](slug:treeview-overview)
+* [Wizard](slug:wizard-overview)
+
+### SpriteClass
+
+Removed the `SpriteClass` parameter, use the [Icon](#icon) parameter instead.
+
+List of affected components:
+
+* [Button](slug:components/button/overview)
+* [ButtonGroup](slug:buttongroup-overview)
+* [SplitButton](slug:splitbutton-overview)
+* [Stepper](slug:stepper-overview)
+* [ToggleButton](slug:togglebutton-overview)
+
+## Shape Parameter
+
+Removed the `Shape` parameter from:
+
+* [Button](slug:components/button/overview)
+* [ButtonGroup](slug:buttongroup-overview)
+* [SplitButton](slug:splitbutton-overview)
+* [ToggleButton](slug:togglebutton-overview)
+
+## Stretched enum Value
+
+* [Card Actions `Layout`](slug:card-actions#layout)
+* [Dialog Action `ButtonsLayout`](slug:dialog-action-buttons)
+* [Grid popup edit form `ButtonsLayout`](slug:grid-editing-popup#form-layout)
+* [Scheduler popup edit form `ButtonsLayout`](slug:scheduler-edit-popup-customization#edit-form-customization)
+* [TreeList popup edit form `ButtonsLayout`](slug:treelist-editing-popup#edit-form-customization)
+
+>caption Stretched enum value in UI for Blazor up to version 3.7.0 and after version 4.0.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 3.7.0</th>
+<th>UI for Blazor 4.0.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<CardActions Layout="@CardActionsLayout.Stretched" />
+````
+
+````RAZOR.skip-repl
+<TelerikDialog ButtonsLayout="@DialogButtonsLayout.Stretched" />
+````
+
+````RAZOR.skip-repl
+<GridPopupEditFormSettings ButtonsLayout="@FormButtonsLayout.Stretched" />
+````
+
+````RAZOR.skip-repl
+<SchedulerPopupEditFormSettings ButtonsLayout="@FormButtonsLayout.Stretched" />
+````
+
+````RAZOR.skip-repl
+<TreeListPopupEditFormSettings ButtonsLayout="@FormButtonsLayout.Stretched" />
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<CardActions Layout="@CardActionsLayout.Stretch" />
+````
+
+````RAZOR.skip-repl
+<TelerikDialog ButtonsLayout="@DialogButtonsLayout.Stretch" />
+````
+
+````RAZOR.skip-repl
+<GridPopupEditFormSettings ButtonsLayout="@FormButtonsLayout.Stretch" />
+````
+
+````RAZOR.skip-repl
+<SchedulerPopupEditFormSettings ButtonsLayout="@FormButtonsLayout.Stretch" />
+````
+
+````RAZOR.skip-repl
+<TreeListPopupEditFormSettings ButtonsLayout="@FormButtonsLayout.Stretch" />
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+## Async Method Suffix
+
+Added an `Async` suffix to the name of asynchronous methods.
+
+>caption Method signatures in UI for Blazor up to version 3.7.0 and after version 4.0.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 3.7.0</th>
+<th>UI for Blazor 4.0.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````C#.skip-repl
+private TelerikGrid GridRef { get; set; }
+// ...
+await GridRef.SetState(desiredState);
+````
+
+````C#.skip-repl
+private TelerikTreeList TreeListRef { get; set; }
+// ...
+await TreeListRef.SetState(desiredState);
+````
+
+</td>
+<td>
+
+````C#.skip-repl
+private TelerikGrid GridRef { get; set; }
+// ...
+await GridRef.SetStateAsync(desiredState);
+````
+
+````C#.skip-repl
+private TelerikTreeList TreeListRef { get; set; }
+// ...
+await TreeListRef.SetStateAsync(desiredState);
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+## Component Changes
+
+This section describes changes per component.
+
+## Button
+
+- Renamed the `Hidden` parameter to `Visible`.
+
+>caption Visible parameter in UI for Blazor up to version 3.7.0 and after version 4.0.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 3.7.0</th>
+<th>UI for Blazor 4.0.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikButton Hidden="false"> Visible button <TelerikButton />
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikButton Visible="true"> Visible button <TelerikButton />
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+## Carousel
+
+- Removed the `OnTimerTick` method.
+
+## Drawer
+
+- Changed the values in the `DrawerPosition` enum from `Left` and `Right` to `Start` and `End`.
+
+>caption DrawerPosition enum values in UI for Blazor up to version 3.7.0 and after version 4.0.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 3.7.0</th>
+<th>UI for Blazor 4.0.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikDrawer Position="@DrawerPosition.Left">
+<TelerikDrawer Position="@DrawerPosition.Right">
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikDrawer Position="@DrawerPosition.Start">
+<TelerikDrawer Position="@DrawerPosition.End">
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+## DropDownList
+
+* Removed the `DefaultItem` parameter, use the `DefaultText` parameter instead.
+
+## Form
+
+- The Form columns can have different widths
+
+## Gantt
+
+- Renamed `<GanttToolBar>` to `<GanttToolBarTemplate>`.
+
+## Grid
+
+- [FilterRow](slug:grid-filter-row) uses `CompositeFilterDescriptor` instead of `FilterDescriptor`.
+- Removed default filter descriptors in the state when the Grid `FilterMode` is set to `FilterMenu`.
+- Removed the `Primary` parameter from `<GridCommandButton>`. Use the `ThemeColor` parameter instead.
+- Removed `ExcelExportableColumn` in favor of `GridExcelExportColumn` for [Excel export](slug:grid-export-events#for-excel-export) and `GridCsvExportColumn` for [CSV export](slug:grid-export-events#for-csv-export).
+- The successor of `ExcelExportableColumn` for CSV export(`GridCsvExportColumn`) does not have `NumberFormat` and `Width`.
+- Renamed `<GridToolBar>` to `<GridToolBarTemplate>`.
+
+## MaskedTextBox
+
+- Changed the signature of the `PlaceHolder` parameter to `Placeholder`.
+
+>caption Placeholder parameter in UI for Blazor up to version 3.7.0 and after version 4.0.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 3.7.0</th>
+<th>UI for Blazor 4.0.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikMaskedTextBox PlaceHolder="The placeholder text" />
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikMaskedTextBox Placeholder="The placeholder text" />
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+## TextArea
+
+- Changed the signature of the `PlaceHolder` parameter to `Placeholder`.
+
+>caption Placeholder parameter in UI for Blazor up to version 3.7.0 and after version 4.0.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 3.7.0</th>
+<th>UI for Blazor 4.0.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikTextArea PlaceHolder="The placeholder text" />
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikTextArea Placeholder="The placeholder text" />
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+## TextBox
+
+- Changed the signature of the `PlaceHolder` parameter to `Placeholder`.
+
+>caption Placeholder parameter in UI for Blazor up to version 3.7.0 and after version 4.0.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 3.7.0</th>
+<th>UI for Blazor 4.0.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikTextBox PlaceHolder="The placeholder text" />
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikTextBox Placeholder="The placeholder text" />
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+## Toolbar
+
+- Changed the default value of the `Adaptive` parameter from `false` to `true`.
+
+## TreeList
+
+- Removed default filter descriptors in the state when the TreeList `FilterMode` is set to `FilterMenu`.
+- Removed `Primary` parameter from the `<TreeListCommandButton>`.
+- Renamed the `<TreeListToolBar>` to `<TreeListToolBarTemplate>`.
+

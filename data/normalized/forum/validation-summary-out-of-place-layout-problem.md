@@ -1,0 +1,13 @@
+# Validation summary out of place, layout problem
+
+## Question
+
+**Mar** asked on 15 Apr 2021
+
+In my grid pop-up form the validation summary looks out of place when I add my own list of errors. I have added pictures of the code and how it looks. Please take a look at it, looks very stranges
+
+## Answer
+
+**Nadezhda Tacheva** answered on 20 Apr 2021
+
+Hi Martin, From what I can see in the screenshot of your code, a possible reason for the validation messages place of rendering issue might be due to the fact that when using EditorTemplate it is up to the application to handle what and how will be rendered in the template. For example, for the FileName column, in the EditorTemplate, you are defining where the error messages will be displayed. You are placing them in a list that is rendered above the InputFile, so you are getting the desired outcome - the error messages are correctly placed. On another hand, for the TradeDate and Amount fields, there is no definition where the error messages should be rendered, so that could be a possible reason for their misplacement. To test and verify if really that is the cause, you can try the approach you are applying for the FileName column - specify the place in the DOM that you want to display the error messages for the certain field. Other options that you can also consider trying are as follows ( for all of them, you can easily define the text that you want to display in the corresponding error message, so you can still use your own list of errors, not some default ones ): Grid build-in validation Editing in the Grid component supports validation. To use it, all you need to do is decorate your model with the desired annotations. Validation errors will be shown in the popup and will prevent the Update operation. An example of Grid with PopUp edit mode that uses validation you can find in the Grid PopUp Editing article. Telerik Validation Summary The Telerik Validation Summary adds customization options on top of the standard ValidationSummary provided by the framework. You can apply your desired CSS rules or even use a Template to fully control the rendering of the error messages. To use it you just need to add the <TelerikValidationSummary> to the validation configuration part. Custom Edit Form You can define your own edit form where you will have full control over the layout and where elements render. You can find examples here and here. I hope you will find all of the above useful and if any further questions appear, please do not hesitate to contact us. Thank you for choosing Telerik UI for Blazor! Regards, Nadezhda Tacheva Progress Telerik

@@ -1,0 +1,19 @@
+# Creating grids in a loop more than one reference?
+
+## Question
+
+**Jas** asked on 23 Jun 2020
+
+Good Afternoon, A few days ago I created this thread on setting the grouping for a grid on initialization and received an excellent solution from Marin Bratanov. [https://www.telerik.com/forums/can-i-set-grid-grouping-and-collapse-on-initialization](https://www.telerik.com/forums/can-i-set-grid-grouping-and-collapse-on-initialization) Now I am trying to generate multiple grids in a loop for each election race in my list. I was successfully able to do this by creating a local variable and grabbing only the specific race entries with a linq query. All of this works fantastically. @foreach (VotingMainModel item in ElectionState) { if (item.OfficeName !=OfficeName) { <br /> <br /> <h6>@item.OfficeName</h6> IEnumerable<VotingMainModel> electionFilter=ElectionState.Where(x=> x.OfficeName.Equals(item.OfficeName)); <TelerikGrid Data="@electionFilter" Groupable="true" @ref="@GridRef" FilterMode="@GridFilterMode.FilterMenu"> <GridAggregates> <GridAggregate Field="@(nameof(VotingMainModel.Votes))" Aggregate="@GridAggregateType.Sum" /> </GridAggregates> <GridColumns> <GridColumn Field="@(nameof(VotingMainModel.OfficeName))" Title="Office" Groupable="true" /> <GridColumn Field="@(nameof(VotingMainModel.Candidate))" Title="Candidate" Groupable="true" /> <GridColumn Field="@(nameof(VotingMainModel.Affiliation))" Title="Affiliation" /> <GridColumn Field="@(nameof(VotingMainModel.Precinct))" Title="Precinct" /> <GridColumn Field="@(nameof(VotingMainModel.Votes))" Title="Votes"> <GroupFooterTemplate> Total Votes: <strong>@context.Sum</strong> </GroupFooterTemplate> </GridColumn> </GridColumns> </TelerikGrid> OfficeName=item.OfficeName; } } However, I would like to also set the grouping automatically for each table generated. When I get to the OnAfterRenderAsync method I get an error that says "The render handle is not yet assigned" Can I have multiple tables reference the same grid reference if they are the exact same grids with just different data in the tables? Can I make and assign local gridref variables to each grid..I did try this, but it simply did not group them. I also tried making a list TelerikGrid and tried to add a new TelerikGrid and set the state in the loop this also really didnt do anything. protected override async Task OnAfterRenderAsync( bool firstRender) { if (firstRender) { { await GridRef.SetState(GetDesiredInitialState()); } this.StateHasChanged(); } }
+
+## Answer
+
+**Jason** answered on 23 Jun 2020
+
+Oh yeah, here is my gridstate code. GridState<VotingMainModel> GetDesiredInitialState() { return new GridState<VotingMainModel>() { GroupDescriptors=new List<GroupDescriptor>() { new GroupDescriptor() { Member="Candidate", MemberType=typeof ( string ) } }, CollapsedGroups=Enumerable.Range(0, 50).ToList() // first 10 groups to be collapsed - you can increase to however many candidates you may habe on the first page }; }
+
+### Response
+
+**Marin Bratanov** answered on 23 Jun 2020
+
+Hi Jason, Generally, components that you create in a loop should have their own unique references, so you should prepare an array/list/any other suitable collection and fill it up with each iteration on the foreach loop. Adding a counter variable can help with indexing, as foreach does not automatically come with one, and simple for-loops tend to not work too well in razor. Then, it is likely that the first render of the component housing all the grids does not have the grids rendered yet, or their refs populated, see here for more details: [https://www.telerik.com/forums/@ref-bug-in-grid.](https://www.telerik.com/forums/@ref-bug-in-grid.) If that's the case, perhaps you may need some more flags to ensure you don't set the grid state on every render of the component. Or, perhaps, the simple wait will let the framework populate the reference. Regards, Marin Bratanov

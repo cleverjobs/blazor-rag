@@ -1,0 +1,25 @@
+# Editor does not work on production
+
+## Question
+
+**Jer** asked on 18 Sep 2020
+
+I am using Editor on Visual studio works fine, but after publish and release to production, the page contains Editor crashed. The application is server side Blazor developer tools shows: 2020-09-18T20:12:10.617Z] Error: There was an unhandled exception on the current circuit, so this circuit will be terminated. For more details turn on detailed exceptions by setting 'DetailedErrors: true' in 'appSettings.Development.json' or set 'CircuitOptions.DetailedErrors'. e.log @blazor.server.js:15
+
+## Answer
+
+**Marin Bratanov** answered on 20 Sep 2020
+
+Hi Jeremy, What is the exact error you get? Maybe it is in the logs, or you could enable the detailed errors for a bit to get it from the browser console (the easiest way to do that is to go to startup.cs, and in ConfigureServices, use this services.AddServerSideBlazor( o=> o.DetailedErrors=true );). In the meantime, can you confirm you have upgraded all assets, including the JS Interop file if you are using it from the CDN (see here for details)? Can you also confirm that the build server can restore the latest Telerik package that has the editor component? You can also find some more troubleshooting steps for deployment issues here in case any of them is what you're hitting. Regards, Marin Bratanov
+
+### Response
+
+**Jeremy** answered on 21 Sep 2020
+
+Hi Marin, Here is the error Editor throws, Looks like System.Text.Json 4.0.1.2 but .net core 3.1 came with System.Text.Json 4.7 [2020-09-21T14:45:30.490Z] Error: System.AggregateException: One or more errors occurred. (Could not load file or assembly 'System.Text.Json, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'. The system cannot find the file specified.) ---> System.IO.FileNotFoundException: Could not load file or assembly 'System.Text.Json, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'. The system cannot find the file specified. File name: 'System.Text.Json, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51' at System.ModuleHandle.ResolveTypeHandleInternal(RuntimeModule module, Int32 typeToken, RuntimeTypeHandle[] typeInstantiationContext, RuntimeTypeHandle[] methodInstantiationContext) at System.Reflection.RuntimeModule.ResolveType(Int32 metadataToken, Type[] genericTypeArguments, Type[] genericMethodArguments) at System.Reflection.CustomAttribute.FilterCustomAttributeRecord(MetadataToken caCtorToken, MetadataImport& scope, RuntimeModule decoratedModule, MetadataToken decoratedToken, RuntimeType attributeFilterType, Boolean mustBeInheritable, ListBuilder`1& derivedAttributes, RuntimeType& attributeType, IRuntimeMethodInfo& ctor, Boolean& ctorHasParameters, Boolean& isVarArg) at System.Reflection.CustomAttribute.AddCustomAttributes(ListBuilder`1& attributes, RuntimeModule decoratedModule, Int32 decoratedMetadataToken, RuntimeType attributeFilterType, Boolean mustBeInheritable, ListBuilder`1 derivedAttributes) at System.Reflection.CustomAttribute.GetCustomAttributes(RuntimeModule decoratedModule, Int32 decoratedMetadataToken, Int32 pcaCount, RuntimeType attributeFilterType) at System.Reflection.CustomAttribute.GetCustomAttributes(RuntimeType type, RuntimeType caType, Boolean inherit) at System.RuntimeType.GetCustomAttributes(Type attributeType, Boolean inherit) at System.Text.Json.JsonSerializerOptions.GetConverter(Type typeToConvert) at System.Text.Json.JsonSerializerOptions.HasConverter(Type typeToConvert) at System.Text.Json.JsonClassInfo.GetClassType(Type type, JsonSerializerOptions options) at System.Text.Json.JsonClassInfo..ctor(Type type, JsonSerializerOptions options) at System.Text.Json.JsonSerializerOptions.GetOrAddClass(Type classType) at System.Text.Json.JsonClassInfo.get_ElementClassInfo() at System.Text.Json.JsonSerializer.Write(Utf8JsonWriter writer, Int32 originalWriterDepth, Int32 flushThreshold, JsonSerializerOptions options, WriteStack& state) at System.Text.Json.JsonSerializer.WriteCore(Utf8JsonWriter writer, Object value, Type type, JsonSerializerOptions options) at System.Text.Json.JsonSerializer.WriteCore(PooledByteBufferWriter output, Object value, Type type, JsonSerializerOptions options) at System.Text.Json.JsonSerializer.WriteCoreString(Object value, Type type, JsonSerializerOptions options) at System.Text.Json.JsonSerializer.Serialize[TValue](TValue value, JsonSerializerOptions options) at Microsoft.JSInterop.JSRuntime.InvokeAsync[TValue](String identifier, CancellationToken cancellationToken, Object[] args) at Microsoft.JSInterop.JSRuntime.InvokeWithDefaultCancellation[T](String identifier, Object[] args) at Telerik.Blazor.Components.TelerikEditor.InitEditor() at Telerik.Blazor.Components.TelerikEditor.OnAfterRenderAsync(Boolean firstRender) --- End of inner exception stack trace ---
+
+### Response
+
+**Marin Bratanov** answered on 21 Sep 2020
+
+Hi Jeremy, This looks like a missing .NET Core version on the server. The System.Text.Json assembly (package) is something that is a part of the framework and not from our components. Regards, Marin Bratanov

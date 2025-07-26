@@ -1,0 +1,7 @@
+# ListView Blazor paging closes dialog
+
+## Question
+
+**Ray** asked on 03 Jul 2023
+
+I have a ListView with paging, it's in the editortemplate in a gridview. the column is defined as: <GridColumn Field="Operators" FieldType="@(typeof(int))" Title="Operators" Width="5rem" Visible="true" ShowColumnChooser="true" ShowColumnMenu="true" Lockable="false" Filterable="true" Editable="true"> <EditorTemplate> <TelerikListView Data=@AssignedOperators Pageable="true" PageSize="5" Context="operators"> <HeaderTemplate> Operators </HeaderTemplate> <Template> <div class="k-card k-card-horizontal"> <div class="k-vbox k-flex-grow"> <div class="k-card-body"> <h4 class="k-card-title"> @(operators.FirstName + " " + operators.LastName) </h4> <h5 class="k-card-subtitle"> @operators.CompanyName </h5> @* <div class="card-date"> @context.Date.ToString("MMM dd yyyy") </div> *@</div> <div class="k-card-actions k-actions-horizontal k-actions-start"> <ListViewCommandButton OnClick="@RemoveOperator" Enabled="true" FillMode="@(ThemeConstants.Button.FillMode.Outline)"> Remove </ListViewCommandButton> </div> </div> @* <img class="k-card-image" src="images/articles/@context.ImageUrl" alt="@context.Subtitle" /> *@</div> </Template> </TelerikListView> </EditorTemplate> </GridColumn> It works well, except for the paging part. When I click on page 2 button, the dialog closes. So I guess the paging buttons are of type submit and not button. How can I prevent the dialog from getting closed when paging?

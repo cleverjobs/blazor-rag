@@ -1,0 +1,19 @@
+
+## Environment
+
+<table>
+<tbody>
+<tr>
+<td>Product</td>
+<td>Drawer for Blazor</td>
+</tr>
+</tbody>
+</table>
+
+## Description
+
+How to put two Drawers on the same site? How to use `Push` and `Overlay` Drawers in the same layout?
+
+## Solution
+
+An example is available in the following project: [https://github.com/telerik/blazor-ui/tree/master/drawer/two-drawers](https://github.com/telerik/blazor-ui/tree/master/drawer/two-drawers).

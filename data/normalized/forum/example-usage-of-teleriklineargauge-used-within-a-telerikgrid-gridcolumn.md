@@ -1,0 +1,7 @@
+# Example usage of TelerikLinearGauge used within a TelerikGrid GridColumn
+
+## Question
+
+**Jer** asked on 19 Nov 2022
+
+Scenario: Put a visual Linear Gauge into a GridColumn so to show a visual perspective of a count instead of a number. Issue: On first page render the Grid to the page, the TelerikLinearGauge shows. If I exit to another page and then come back to the page, the TelerikLinearGauge will not render, and the column is now blank. How to Refresh: There must be some trick to having the image of the gauge re-render on subsequent refreshes of the page. I hate guessing and think this is a typical scenario that should be documented on your site. Right? Preferred Approach: The Linear Gauge will render and refresh just like all the other columns without custom workarounds and/or techniques. Telerik. Blazor. Components. TelerikLinearGauge LinearGaugeRef { get; set; } Code: <GridColumn Field="@nameof(PackageRequest.ViewCount)" Title="Views" Width="40px" Visible="false"> <Template> @{ var item=context as PackageRequest; @if (item.ViewCount> 0) { <TelerikLinearGauge> <LinearGaugeScales> <LinearGaugeScale Min="0" Max="@TotalViewCount" Vertical="false"> <LinearGaugeScaleMinorTicks Visible="false"></LinearGaugeScaleMinorTicks> </LinearGaugeScale> </LinearGaugeScales> <LinearGaugePointers> <LinearGaugePointer Value="@item.ViewCount" /> </LinearGaugePointers> </TelerikLinearGauge> } } </Template> </GridColumn>

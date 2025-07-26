@@ -1,0 +1,13 @@
+# Recurrence Event not including last occure
+
+## Question
+
+**Hol** asked on 01 Aug 2022
+
+Hi, I have a recurrent event with the following dates: "Start": "2022-08-01T07:00:00", "End": "2022-08-01T08:00:00", "RecurrenceRule": "FREQ=DAILY;UNTIL=2022-08-04T05:00:00" [https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10](https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10) says: The UNTIL rule part defines a DATE or DATE-TIME value that bounds the recurrence rule in an inclusive manner. If the value specified by UNTIL is synchronized with the specified recurrence, this DATE or DATE-TIME becomes the last instance of the recurrence. The value of the UNTIL rule part MUST have the same value type as the "DTSTART" property I generated the events with Thunderbird, synchronized to the caldav-Server and read it from there. In the Telerik Scheduler I got only 3 occurences of the event: from the 1st to the 3rd. In Thunderbird I got 4. From the 1st to the 4th. According with the RFC, Thunderbird is right :-) Why there are only 3 events in the Telerik Scheduler? And who get I the correct events (without "hack" around)?
+
+## Answer
+
+**Kristian** answered on 04 Aug 2022
+
+Hello Holger, It looks like we have a bug either in our recurrence editor or in the recurrence generation. I found out that our Editor generates Until parameter with the base hours of the day and our generator compare the dates with their times. I logged the bug and added your vote to it: [https://feedback.telerik.com/blazor/1574987-recurrence-event-not-including-last-occure](https://feedback.telerik.com/blazor/1574987-recurrence-event-not-including-last-occure) In the referenced spec it's described that the UNTIL can contain Date or DateTime, but looks like each of the generators decides if the time is included in respected inside the event generation. I will consult with the dev team and we will fix the issue according to the standard. A workaround until then would be to parse and change dynamically the Until the value of the RecurringRule property in your appointment. You can do this inside the Add and Update handlers or when preparing the Appointment data before passing it to the Scheduler. If the time of the Until parameter is the maximum possible time for the day, the recurring generator will generate the events correctly. // item is your appointment item var rule=RecurrenceRule.Parse(item.RecurrenceRule); if(rule.Until.HasValue) { var untilDate=rule.Until.Value; rule.Until=new DateTime(untilDate.Year, untilDate.Month, untilDate.Day, 23, 59, 59); } item.RecurrenceRule=rule.ToString(); Regards, Kristian

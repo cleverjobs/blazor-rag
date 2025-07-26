@@ -1,0 +1,7 @@
+# Issue with Display of Divided Slots in Telerik Blazor Scheduler
+
+## Question
+
+**Pav** asked on 11 Nov 2024
+
+Hi, Dear Telerik Support Team, I am reaching out to report an issue with the display of time slots in the Telerik Blazor Scheduler. I have configured the Scheduler to show time slots divided into intervals (e.g., 15-minute divisions) between each hour. However, the display does not reflect this configuration as expected. Current Behavior: In the current Scheduler view (refer to attached "ActualCalendar.png"), each hour is displayed as a single block without any subdivisions. This makes it challenging to view and schedule appointments with finer time granularity. Expected Behavior: I would like the Scheduler to display time slots in a divided format, as shown in the "ExpectedCalendar.png" attachment. In this view, each hour is divided into 15-minute intervals (or the chosen interval), allowing for more precise scheduling and time management. Request: Could you please guide me on how to achieve the expected behavior with the Telerik Blazor Scheduler? I have already tried adjusting the SlotDuration and MinorTickCount properties, but it does not seem to produce the desired effect. Your assistance in resolving this issue would be greatly appreciated, as the ability to view divided time slots is crucial for our application's scheduling requirements. Thank you for your time and support. Best regards, Pavan Rahul

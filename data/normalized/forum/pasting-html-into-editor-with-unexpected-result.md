@@ -1,0 +1,17 @@
+# Pasting HTML into Editor with unexpected result
+
+## Question
+
+**Chr** asked on 10 Feb 2022
+
+I'm using Telerik.UI.for.Blazor 3.0.0 and pasting the following HTML does not lead to the expected result. <ul> <li> A </li> <li> B </li> <li> C </li> </ul> Result (Preview): <ul> <li> A </li> <li> B </li> <li> C </li> </ul> Result (Raw view): <p> &lt; ul &gt; </p> <p> &lt; li &gt; A &lt; /li &gt; </p> <p> &lt; li &gt; B &lt; /li &gt; </p> <p> &lt; li &gt; C &lt; /li &gt; </p> <p> &lt; /ul &gt; </p> Expected Result: A B C Using Telerik UI for jQuery it was sufficient to set the following setting to get the expected result. $scope.kendoEditorOptions={
+pasteCleanup: {
+keepNewLines: true, // Removes all HTML elements, such as the all option, but preserves new lines. Disabled by default.
+}
+} I've tried out all different settings that the Blazor version offers using the demo from [https://demos.telerik.com/blazor-ui/editor/paste-cleanup?_ga=2.205591514.897269513.1644322509-2087119569.1643891453,](https://demos.telerik.com/blazor-ui/editor/paste-cleanup?_ga=2.205591514.897269513.1644322509-2087119569.1643891453,) but without success. For a workaround I've implemented the ValueChanged EventCallback to convert from <p> &lt; ul &gt; </p> to <ul> on-the-fly, but since each line of the pasted content is wrapped around with with <p>...</p> this is not optimal. Is there a way to achieve the expected result? It would already help if the automatic wrapping with <p>...</p> tags could be turned off. Otherwise I'm leaning towards switching back to the jQuery version. Thanks and BR!
+
+## Answer
+
+**Nadezhda Tacheva** answered on 15 Feb 2022
+
+Hi Christian, The result you listed as expected (having the bullet list rendered in the Telerik UI for jQuery Editor) is associated with a bit different functionality than the paste cleanup itself as it actually translates the pasted content to HTML right away. The behavior is a bit different in the Telerik UI for Blazor Editor - as per its current configuration, the paste cleanup options serve to configure some specifics of the content that is pasted (for example, strip some tags, remove attributes etc.). However, this will not automatically translate the pasted content into HTML, it will be treated as plain text and this is why you see the tags. Such functionality can be achieved through the Paste event - once exposed, you will be able to get the pasted content and modify it as needed (translate it to html, for instance). I have added your vote to the public request to keep proper track of the demand for this feature. It is currently in our backlog and the best way to keep in track with its progress is to follow the item, so you can receive email notifications on status changes. As for the content being wrapped in paragraphs, indeed, this is the current behavior and it is associated with the ProseMirror schema (this is the engine that the Editor uses). You may check these discussion for some more details: [https://github.com/ProseMirror/prosemirror/issues/344](https://github.com/ProseMirror/prosemirror/issues/344) [https://discuss.prosemirror.net/t/removing-the-default-paragraph-p-inside-a-list-item-li/2745](https://discuss.prosemirror.net/t/removing-the-default-paragraph-p-inside-a-list-item-li/2745) In case you want to customize that, you can use schema.js and the ProseMirror engine. I hope the provided information will help you move forward with your application. Please let us know if any further questions appear. Regards, Nadezhda Tacheva

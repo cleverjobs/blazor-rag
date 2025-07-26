@@ -1,0 +1,19 @@
+
+## Environment
+
+<table>
+<tbody>
+<tr>
+<td>Product</td>
+<td>Scheduler for Blazor</td>
+</tr>
+</tbody>
+</table>
+
+## Description
+
+The built-in edit form of the scheduler lets you edit all aspects of the appointments. In some cases, however, you may want to have some more metadata, or to implement certain business logic there. In such cases, you must create a custom edit form through the scheduler's `OnEdit` event.
+
+## Solution
+
+An example is available in the following project: [https://github.com/telerik/blazor-ui/tree/master/scheduler/custom-edit-form](https://github.com/telerik/blazor-ui/tree/master/scheduler/custom-edit-form)

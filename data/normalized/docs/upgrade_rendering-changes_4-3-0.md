@@ -1,0 +1,123 @@
+
+# Rendering Changes in 4.3.0
+
+* [Icons](#icons)
+* [Breadcrumb](#breadcrumb)
+* [ColorGradient](#colorgradient)
+* [ColorPalette](#colorpalette)
+* [FlatColorPicker](#flatcolorpicker)
+* [MultiColumnComboBox](#multicolumncombobox)
+* [Slider](#slider)
+* [Built-in Dialogs](#built-in-dialogs)
+
+## Icons
+
+The default icon type in the Telerik UI for Blazor suite changes from `FontIcon` to `SvgIcon`. This marks the next milestone in a series of improvements related to the [Content Security Policy (CSP)](slug:troubleshooting-csp).
+
+### All Telerik UI for Blazor components will now use SVG icons by default
+
+When upgrading your application to 4.3.0 you might experience two possible scenarios related to the new default icon type:
+
+* [Custom CSS that targets icons may stop working](#changes-in-the-rendering)
+* [Failing HTML tests](#failing-html-tests)
+
+#### Changes In The Rendering
+
+The built-in icons in Telerik UI for Blazor will now render with different HTML markup and CSS classes. This can break any CSS selectors that are targeting the icons:
+
+<table>
+<thead>
+<tr>
+<th>UI for Blazor 4.2.0</th>
+<th>UI for Blazor 4.3.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top">
+````RAZOR.skip-repl
+<span class="k-icon k-i-camera"></span>
+````
+</td>
+<td style="vertical-align:top">
+````RAZOR.skip-repl
+<span class="k-svg-icon k-svg-i-camera">
+    <svg>...</svg>
+</span>
+````
+</td>
+</tr>
+</tbody>
+</table>
+
+#### Failing HTML Tests
+
+If you are testing the rendered HTML by the Telerik UI for Blazor components, some tests will fail due to the [Changes In the Rendering of the icons](#changes-in-the-rendering).
+
+### Continuing with FontIcons
+
+To continue using `FontIcons` as the default icon type in the application, [set the global icon type to `Font`](slug:common-features-icons#set-global-icon-type).
+
+>note As part of the R3 2023 release, the font icons will be detached from the Telerik UI for Blazor themes. To continue using the font icons in your application, either add a separate CDN reference or download and reference the stylesheet included in the [Telerik UI for Blazor package](slug:installation-msi#how-to-download-the-automated-installer).
+
+## Breadcrumb
+
+* Removed the `k-flex-none` CSS class from the `<li class="k-breadcrumb-item">` element.
+* Removed the `k-flex-none` and `k-cursor-pointer` CSS classes from the `<span class="k-breadcrumb-link">` element.
+* Removed the `k-flex-none` and `k-cursor-pointer` CSS classes from the `<span class="k-breadcrumb-root-link">` element.
+* Added the `<span class="k-breadcrumb-item-text">` HTML element to wrap the Breadcrumb item text.
+
+| Prior to 4.3.0 | 4.3.0 and Later |
+|---|---|
+| `<span class="k-breadcrumb-icontext-link">` | `<a class="k-breadcrumb-icontext-link">` |
+| `<ol class="k-breadcrumb-container k-flex-wrap">` | `<ol class="k-breadcrumb-container !k-flex-wrap">` |
+
+## ColorGradient
+
+The `k-disabled` CSS class has been added when the Breadcrumb item is [`Disabled`](slug:breadcrumb-data-binding#breadcrumb-item-features).
+
+| Prior to 4.3.0 | 4.3.0 and Later |
+|---|---|
+| `<a class="k-draghandle k-draghandle-end">` | `<span class="k-draghandle k-draghandle-end">` |
+
+# ColorPalette
+
+The `<div class="k-colorpalette-table-wrap">` HTML element is now removed.
+
+## FlatColorPicker
+
+* The `<div class="k-coloreditor-header-actions">` HTML element will be rendered in all [views](slug:flatcolorpicker-views).
+* Added the `k-actions-horizontal` CSS class to the `<div class="k-coloreditor-header-actions">` HTML element.
+* Added the `k-coloreditor-apply` CSS class to the **Apply** button.
+* Added the `k-coloreditor-cancel` CSS class to the **Cancel** button.
+
+## MultiColumnComboBox
+
+* Removed the `k-popup-flush` CSS class from the `<div class="k-popup">` element.
+* Removed the `k-combobox-popup` CSS class from the `<div class="k-popup">` element.
+* Removed the `k-list-container` CSS class from the `<div class="k-popup">` element.
+* Removed the `<div class="k-table-footer-wrap">` element. Became a child tag of the `<div class="k-table-footer">`.
+
+## Slider
+
+The 4.3.0 release brings about the following rendering changes for the Telerik UI for Blazor Slider component:
+
+| Prior to 4.3.0 | 4.3.0 and Later |
+|---|---|
+| `<a class="k-draghandle k-draghandle-end">` | `<span class="k-draghandle k-draghandle-end">` |
+| `<a class="k-button-decrease">` | `<button class="k-button-decrease">` |
+| `<a class="k-button-increase">` | `<button class="k-button-increase">` |
+
+## Built-in Dialogs
+
+In an attempt to unify the look and feel of our components, the action buttons in all built-in dialogs now follow a common set of guidelines:
+
+* Action buttons are now rendered inside a dedicated footer `<div class="k-actions">` element.
+* The confirmation button always precedes the cancellation one, when such is present.
+* When part of a non-resizable dialog, the action buttons are stretched. Such an example is the Filter or the Column Menu.
+
+Such dialogs are any edit forms, filter menus, column menus, editor's tools, as well as the TimePicker and DateTimePicker popups.
+
+## See Also
+
+* [Use best practices when overriding theme styles](slug:themes-override#best-practices)

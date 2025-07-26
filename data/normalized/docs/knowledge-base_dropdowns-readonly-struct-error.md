@@ -1,0 +1,72 @@
+
+## Environment
+<table>
+<tbody>
+<tr>
+<td>Product</td>
+<td>ComboBox for Blazor, DropDownList for Blazor, Autocomplete for Blazor, MultiSelect for Blazor</td>
+</tr>
+</tbody>
+</table>
+
+## Description
+When using the combo box component when the desired data is list of readonly structs there is a null reference exception and the combo box does not work.
+
+## Error Message
+A typical error would be null reference exception like the one below:
+
+````C#.skip-repl
+NullReferenceException: Object reference not set to an instance of an object.
+Telerik.Blazor.Components.TelerikComboBox<TItem, TValue>.<OnParametersSetAsync>b__70_0(ListDataItem item)
+````
+
+## Steps to Reproduce
+
+<div class="skip-repl"></div>
+````RAZOR
+Selected value: @selectedValue
+<br />
+
+<TelerikComboBox Data="@myComboData" TextField="MyTextField" ValueField="MyValueField" @bind-Value="selectedValue"
+                 Placeholder="Select an item..." ShowClearButton="true" Filterable="true">
+</TelerikComboBox>
+
+@code {
+    public readonly struct ModelData
+    {
+        public ModelData(string textField, int valueField)
+        {
+            MyTextField = textField;
+            MyValueField = valueField;
+        }
+        public readonly string MyTextField;
+        public readonly int MyValueField;
+    }
+
+    int selectedValue { get; set; } = 3;
+
+    IEnumerable<ModelData> myComboData = Enumerable.Range(1, 20).Select(x => new ModelData("item " + x, x));
+}
+````
+
+## Possible Cause
+The components require a model when binding so it can be instantiated with a parameterless constructor. This is a requirement that comes down to the forms validation that they must support and getting the `Default` value and object. Structs do not have a parameterless constructor.
+
+## Solution
+There are two approaches to avoiding this error:
+
+* Use a model (class), not a struct, as shown [here](slug:components/combobox/databind#bind-to-a-model), for example
+
+* When setting the `Data` of the dropdown, make it a collection of anonymous objects, for example:
+
+<div class="skip-repl"></div>
+````RAZOR.skip-repl
+@* See the Select in the Data parameter *@
+
+<TelerikComboBox Data="@myComboData.Select(x => new {MyTextField = x.MyTextField, MyValueField = x.MyValueField })" 
+                TextField="MyTextField" ValueField="MyValueField" 
+                @bind-Value="selectedValue"
+                Placeholder="Select an item..." ShowClearButton="true" Filterable="false">
+</TelerikComboBox>
+````
+

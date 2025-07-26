@@ -1,0 +1,13 @@
+# SplitButton Causes Errors
+
+## Question
+
+**cma** asked on 24 Jan 2023
+
+We've used the SplitButton on a variety of windows, and after upgrading to v4.0 we've noticed that the pages containing a SplitButton do not load, they simply die off into never-never land. Somewhere we've seen OutofMemory but we are not positive it's happening on this call. We have a few different use cases for our SplitButtons - Save, Save & Close, and Delete. The other is to choose your printing or email type. Do we have this formatting incorrectly? They work in v3.7 just fine. And, I noticed the documentation is for v3.7, not v4.0 -- [https://demos.telerik.com/blazor-ui/splitbutton/overview](https://demos.telerik.com/blazor-ui/splitbutton/overview) <TelerikSplitButton Icon="@SvgIcon.Save" OnClick="@(()=> HandleValidSubmit(false))"> <SplitButtonContent> Save </SplitButtonContent> <SplitButtonItems> <SplitButtonItem Class="mr-2 save" OnClick="@( ()=> HandleValidSubmit(false))" Icon="@SvgIcon.Save"> Save </SplitButtonItem> <SplitButtonItem Class="mr-2 save" OnClick="@( ()=> HandleValidSubmit(true))" Icon="@SvgIcon.Save"> Save & Close </SplitButtonItem> <SplitButtonItem Class="mr-2 delete" OnClick="@ButtonDeleteOnClick" Icon="@SvgIcon.Trash" Enabled="@IsDeletionAllowed"> Delete </SplitButtonItem> </SplitButtonItems> </TelerikSplitButton> <TelerikSplitButton Class="print-button" OnClick="@OnPreviewClickHandler" Icon="@SvgIcon.FilePresentation"> <SplitButtonContent> Print To </SplitButtonContent> <SplitButtonItems> <SplitButtonItem Class="print-button" OnClick="@OnPreviewClickHandler" Icon="@SvgIcon.FilePresentation"> Preview </SplitButtonItem> <SplitButtonItem Class="print-button" OnClick="@OnPdfClickHandler" Icon="@SvgIcon.FilePdf"> PDF </SplitButtonItem> <SplitButtonItem Class="print-button" OnClick="@OnExcelClickHandler" Icon="@SvgIcon.FileExcel"> Excel </SplitButtonItem> <SplitButtonItem Class="print-button" OnClick="@OnWordClickHandler" Icon="@SvgIcon.FileWord"> Word </SplitButtonItem> <SplitButtonItem Class="print-button" OnClick="@OnClick_BtnEmail" Icon="@SvgIcon.EnvelopLink"> Send Email </SplitButtonItem> <SplitButtonItem Class="print-button" OnClick="@OnClick_BtnText" Icon="@SvgIcon.Rss"> Send Text </SplitButtonItem> </SplitButtonItems> </TelerikSplitButton>
+
+## Answer
+
+**Dimo** answered on 26 Jan 2023
+
+Hello everyone, What Chris says is correct - the SplitButton has an integration bug with the new SVG icons. It causes the app to crash. The issue is now fixed and the changes will take effect with the patch release that we plan within a few days. The same applies for the outdated online demo description. Chris, thanks for reporting! Regards, Dimo

@@ -1,0 +1,13 @@
+# Update Scheduler view when data is added to collection
+
+## Question
+
+**And** asked on 16 Jul 2020
+
+I am attempting to populate some "dummy" data into a Scheduler component by iterating over a list of Entries and adding each to the Scheduler's Data, like so: foreach (ScheduleEntry entry in DummyDataForDemo) { await TimesheetService.AddOrUpdateEntryAsync(entry); EntryUpdated(entry); } EntryUpdated(entry) calls ScheduleEntries.Add(entry), where ScheduleEntries is the datasource of my Scheduler component. When EntryUpdated is called from the Scheduler's OnEdit callback, the Scheduler updates properly, and the ScheduleEntry is shown correctly. However, in this iterator, the Scheduler does *not* properly populate newly added entries. At most, I've seen two (of twenty) entries properly displayed until I refresh the page. How can I accomplish this? 1: I've tried calling StateHasChanged() after iterating over DummyDateForDemo. 2: I've tried making ScheduleEntries an ObservableCollection. This doesn't *seem* to be supported anyway, since documentation mentions "Observable Data" for e.g. Grids, but not Schedulers. 3. I've also tried the trick found at [https://feedback.telerik.com/blazor/1409112-the-grid-does-not-update-on-data-source-change](https://feedback.telerik.com/blazor/1409112-the-grid-does-not-update-on-data-source-change) but that doesn't work because I can't set Scheduler.Data outside of the component. Please note that all other code is executing correctly - the ScheduleEntry objects *are* being added to the datasource, and they're being properly saved to the database. Thanks, Andrew
+
+## Answer
+
+**Marin Bratanov** answered on 16 Jul 2020
+
+Hi Andrew, For a component to re-render when you alter its collection (add, remove, clear), it needs to handle some events from an ObservableCollection (read more here ). The Scheduler component does not do that yet. You can Follow the implementation of that feature for more components here. So, to have the scheduler update, you need to provide a new reference to its Data so that the framework calls OnParametersSet (read more on the concept here ). Said shortly, you need something like this (pseudocode): ScheduleEntries=new List<T>( myUpdatedListOfAppontments ); I must also mention that the OnEdit event of the scheduler is designed so you have fine control over what the user can edit - it is cancellable so you can prevent editing certain entries. Changing the data souce in it should not be done as it will try to trigger a re-render in the middle of a re-render and that could cause issues. In a future release, you would be able to also alter the edited appointment through the event arguments (see here, and if that's what you want - Vote for it and Follow it). Regards, Marin Bratanov

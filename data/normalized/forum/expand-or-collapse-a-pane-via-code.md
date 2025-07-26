@@ -1,0 +1,13 @@
+# Expand or collapse a pane via code
+
+## Question
+
+**Mat** asked on 13 Jul 2021
+
+Hello, I try to expand and collapse a pane via code. However, so far without success. razor: <TelerikSplitter Class="kunden-splitter nopadding" @ref="@Splitter" Width="100%" Height="100%" Orientation="@SplitterOrientation.Vertical" OnResize="@OnResizeHandler" OnExpand="@OnExpandHandler" OnCollapse="@OnCollapseHandler"> <SplitterPanes> <SplitterPane Size="@PaneSizeOne"> <div> stuff... </div> </SplitterPane> <SplitterPane Collapsible="true" Collapsed="@isCollapsed"> <div> stuff... </div> </SplitterPane> </SplitterPanes> </TelerikSplitter> Variant 1: I use a TelerikToggleButton to change the variable isCollapsed: void DetailsSelectedChangedHandler(bool currSelectedState) { isCollapsed=!currSelectedState; StateHasChanged(); } Variant 2: I call the respective events: if (isCollapsed) { SplitterCollapseEventArgs args=new SplitterCollapseEventArgs(); args.Index=1; args.ShouldRender=true; await OnCollapseHandler(args); } else { SplitterExpandEventArgs args=new SplitterExpandEventArgs(); args.Index=1; args.ShouldRender=true; await OnExpandHandler(args); } Variant 3: I use the State (use z just for this example) var states=Splitter.GetState(); int z=0; foreach (var item in states.Panes) { if (z==1) { item.Collapsed=isCollapsed; } z +=1; } ----------- unfortunately all without success Does anyone have an idea or solution for this? Thank you very much Greetings Matthias
+
+## Answer
+
+**Nadezhda Tacheva** answered on 15 Jul 2021
+
+Hello Matthias, At this stage, the provided sample will not deliver the desired result in terms of programmatically changing the Collapsed or Size parameter of the SplitterPane at runtime. The reason behind this is that the Splitter does not currently track changes in the SplitterPane parameters and therefore it does not react if such a change occurs. We have an opened bug report for that in our public feedback portal - SplitterPane does not react to changes in its parameters. I have added a vote on your behalf to increase its popularity as we are prioritizing the bug fixes based on the community interest and demand. You can also click the Follow button to subscribe and receive email notifications when its status changes. This is the best way to keep in track with the progress of the bug fix as once we know which release will contain this fix, we will update its status in the feedback portal and you will be notified via email right away. I hope you will find the above information useful. If any further questions appear, please do not hesitate to contact us. Thank you for choosing Telerik UI for Blazor! Regards, Nadezhda Tacheva Progress Telerik

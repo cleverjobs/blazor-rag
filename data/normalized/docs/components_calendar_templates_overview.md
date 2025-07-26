@@ -1,0 +1,22 @@
+
+# Calendar Templates
+
+You can customize the calendar appearance through the various templates it provides so you can add more details for your users such as mark special days or holidays, or events.
+
+The Calendar component provides templates for:
+
+* [Month Cell](slug:calendar-templates-month) - the rendering of each cell in the Month view.
+
+* [Year Cell](slug:calendar-templates-year) - the rendering of each cell in the Year view.
+
+* [Decade Cell](slug:calendar-templates-decade) - the rendering of each cell in the Decade view.
+
+* [Century Cell](slug:calendar-templates-century) - the rendering of each cell in the Century view.
+
+* [Header Template](slug:calendar-templates-header) - the header segment of the Calendar.
+
+## See Also
+
+* [Live Demo: Calendar Templates](https://demos.telerik.com/blazor-ui/calendar/templates)
+
+

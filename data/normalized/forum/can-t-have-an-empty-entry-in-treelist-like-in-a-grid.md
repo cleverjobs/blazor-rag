@@ -1,0 +1,34 @@
+# Can't have an empty entry in TreeList like in a Grid
+
+## Question
+
+**Han** asked on 08 Jun 2021
+
+I am using the ComboBox control to select values. Additionally there is a button next to the control which opens the TelerikWindow containing a Datagrid displaying the same data as the ComboBox. The benefit to the user should be paging and searching through the data. The user can select a row from the DataGrid which is then displayed in the ComboBox after closing the window. Since the ComboBox can be empty and have no value selected, an empty data entry is inserted into the bound data collection at the beginning, so the empty option is reflected in the grid. This works very well, but since I also have hierarchical data I had to change to the TreeList Control instead of the DataGrid. The switch was easy, but then it stopped working, because the TreeList doesn't allow empty values. Without an empty selection option the TreeList works great, but I need this empty row in the grid, since the ComboBox has it as well. I get following exception at runtime, that the key in the dictionary can't be null. crit: Microsoft.AspNetCore.Components.WebAssembly.Rendering.WebAssemblyRenderer[100]
+Unhandled exception rendering component: Value cannot be null. (Parameter 'key')
+System.ArgumentNullException: Value cannot be null. (Parameter 'key')
+at System.Collections.Generic.Dictionary`2[[System.Object, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Telerik.Blazor.Components.TreeList.Models.TreeListItem`1[[TelerikBlazorGrid.Client.ViewModels.ComboBoxData`1[[System.String, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TelerikBlazorGrid.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Telerik.Blazor, Version=2.24.0.0, Culture=neutral, PublicKeyToken=20b4b0547069c4f8]].TryInsert(Object key, TreeListItem`1 value, InsertionBehavior behavior)
+at System.Collections.Generic.Dictionary`2[[System.Object, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Telerik.Blazor.Components.TreeList.Models.TreeListItem`1[[TelerikBlazorGrid.Client.ViewModels.ComboBoxData`1[[System.String, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TelerikBlazorGrid.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Telerik.Blazor, Version=2.24.0.0, Culture=neutral, PublicKeyToken=20b4b0547069c4f8]].Add(Object key, TreeListItem`1 value)
+at Telerik.Blazor.Data.TelerikTreeListDataSource`1[[TelerikBlazorGrid.Client.ViewModels.ComboBoxData`1[[System.String, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TelerikBlazorGrid.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]].GetItems(IEnumerable`1 data)
+at Telerik.Blazor.Data.TelerikTreeListDataSource`1[[TelerikBlazorGrid.Client.ViewModels.ComboBoxData`1[[System.String, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TelerikBlazorGrid.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]].BuildTree(IEnumerable`1 sourceData)
+at Telerik.Blazor.Data.TelerikTreeListDataSource`1[[TelerikBlazorGrid.Client.ViewModels.ComboBoxData`1[[System.String, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TelerikBlazorGrid.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]].InitData(IEnumerable`1 sourceData)
+at Telerik.Blazor.Data.TelerikTreeListDataSource`1[[TelerikBlazorGrid.Client.ViewModels.ComboBoxData`1[[System.String, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TelerikBlazorGrid.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]].ProcessData(IEnumerable data)
+at Telerik.Blazor.Components.Common.DataBoundComponent`1[[TelerikBlazorGrid.Client.ViewModels.ComboBoxData`1[[System.String, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TelerikBlazorGrid.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]].ProcessDataInternal()
+at Telerik.Blazor.Components.Common.DataBoundComponent`1[[TelerikBlazorGrid.Client.ViewModels.ComboBoxData`1[[System.String, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TelerikBlazorGrid.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]].OnParametersSetAsync()
+at Telerik.Blazor.Components.TelerikTreeList`1[[TelerikBlazorGrid.Client.ViewModels.ComboBoxData`1[[System.String, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TelerikBlazorGrid.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]. <> n__0()
+at Telerik.Blazor.Components.TelerikTreeList`1. <OnParametersSetAsync> d__127[[TelerikBlazorGrid.Client.ViewModels.ComboBoxData`1[[System.String, System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], TelerikBlazorGrid.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]].MoveNext()
+at Microsoft.AspNetCore.Components.ComponentBase.CallStateHasChangedOnAsyncCompletion(Task task)
+at Microsoft.AspNetCore.Components.ComponentBase.RunInitAndSetParametersAsync() Here are some code snippets //My model class public class ComboBoxData <T>
+{ public T? Value { get; set; } public string? Text { get; set; }=string.Empty;
+} //The data bound to the Grid / TreeList public IEnumerable <ComboBoxData <string?>> Data { get; set; }=new List<ComboBoxData<string?>>(); //In the initialize method I insert an empty model object at the beginning protected override Task OnInitializedAsync ( ) { var dataList=GenerateData();
+dataList.Insert( 0, new ComboBoxData<string?>());
+Data=dataList; return base.OnInitializedAsync();
+} I also attached you a small Blazor WASM example with both Grid implementations to show the problem. Thanks in advance for helping. Best regards
+
+## Answer
+
+**Hannes** answered on 10 Jun 2021
+
+Well, I found the answer in my own mistake. Since I am using a TreeList now, it's necessary to bind the Id and ParentId field to the control, what I did. <TelerikTreeList Data=@DataList IdField="@(nameof(ComboBoxData<TValue>.Id))" ParentIdField="@(nameof(ComboBoxData<TValue>.ParentId))" The model class contains nullable Id and ParentId properties. public class ComboBoxData <T>
+{ public T? Value { get; set; } public string? Text { get; set; }=string.Empty; public decimal? Id { get; set; } public decimal? ParentId { get; set; }
+} The mistake I made was that I didn't set the Id parameter of the "empty entry" option to an appropriate non-null value. The exception didn't come from the null value, rather from the null Id. So I fixed the issue with setting the Id property. dataList.Insert( 0, new ComboBoxData<string?> { Id=decimal.MinValue }); Damn myself for not seeing this before ...

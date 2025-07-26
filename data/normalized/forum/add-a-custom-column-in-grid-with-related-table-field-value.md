@@ -1,0 +1,13 @@
+# Add a custom column in Grid with related table field value
+
+## Question
+
+**Mar** asked on 05 Jun 2023
+
+Hello, I have a Telerik grid with data from a List<UserRoleModel> userRoles. This model and table (only) contains the fields UserId, and the RoleId. I want to show the description of the Role (Field 'Description' of Table 'Roles where Roles.Id=RoleId') and the combined name of the user (Fields 'Firstname + Lastname' from table 'Users where Users.Id=UserId) in two extra custom grid columns next to the UserId and RoleId columns which are in the grid already (see code). I probably have to use a column template and have been playing with that, but the documentation I could find is not clear and does not provide a clear sample. I could create two extra fields in the UserRoleModel but I can imagine that a more easy way is possible. Hope that somebody can give me a simple sample / snippet. regards, Marc Verkade private List <UserRoleModel>? userRoles=new List <UserRoleModel> (); <TelerikGrid @ref="TheGrid" Class="grid" Data=@userRoles Navigable="true"> <GridColumns> <GridColumn Field="@nameof(UserRoleModel.UserId)" Title="User Id" /> <GridColumn Field="@nameof(UserRoleModel.RoleId)" Title="Role Id" /> <GridColumn Field="<The field Firstname + lastname from table Users>" Title="User name" /> <GridColumn Field="<The field Description' from table Roles" Title="Role name"> </GridColumns> </TelerikGrid>
+
+## Answer
+
+**Nadezhda Tacheva** answered on 06 Jun 2023
+
+Hello Marc, The scenario can be handled in several ways: Flatten the data and move fields from the foreign key table to the current Grid data source. As you've mentioned, create two extra fields in the UserRoleModel. Use nested models, so that you may be able to add entire model references instead of fully flattening the data. You may check this article for more details and an example of such an approach: Bind to nested (navigation) properties in complex objects. Keep the data normalized and use the various Grid templates to show the corresponding values from the foreign key tables. You are correct that you need to use a Column Template to display the needed values. If you are planning to support other functionalities in the Grid, you will also need the corresponding templates - for example, Editor Template, Filter Template etc. Details and an example of this approach you can find here: Grid Foreign Key Column. I hope you will find the above information and the listed resources useful. Take your time to revise and test the options and please let us know if any other questions appear. Regards, Nadezhda Tacheva

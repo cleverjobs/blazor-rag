@@ -1,0 +1,13 @@
+# BUnit test incell editing
+
+## Question
+
+**Con** asked on 09 May 2025
+
+Hello Telerik team I need to write a bUnit test on a component that has a TelerikGrid inside. I want to test what happens after I edit and change the value of a cell. My grid is setup to be in InCell edit mode. I have managed to trigger the creation of the editor by doing the following in my bUnit function cut.Find("td[data-col-index=\"3\"]").Click(); variable cut is bUnit's IRenderFragment The above command will trigger the OnEdit EventCallback of the TelerikGrid component. What I am not able to do is to end the inCell edit, trigger the TelerikGrid's OnUpdate EventCallback and at the same time refresh of the component (remove the editor etc). I have tried clicking another cell like cut.Find("td[data-col-index=\"4\"]").Click(), I also tried triggering a blur or focusout event with no success. My final try was to programmatically call a function that would end the current edit following this article. With this I managed to trigger calling the OnUpdate method of the TelerikGrid, but after finishing execution, the bUnit's Markup result still remained as it was, with the editor enabled and visible. In my OnUpdate handle method, I do some calculations and decide if I want to show a warning indicator on row level (first column). Using the programmatically end edit call, the code get's executed correctly, triggering the change of 1st column to include the warning indicator, the actual markup of the unit test never get's updated and is left with the editor still visible. Is it possible to test editing mode of TelerikGrid? Am I missing something, like triggering the grid to refresh? Do you have any recommendation or a simple example to demonstrate the ability to trigger incell edit and finish it (removing the editor) with bunit? Other companies provide a BUnit test library to help with this process, since all of you (component vendors) seem rely heavily on javascript. What is your approach on that?
+
+## Answer
+
+**Dimo** answered on 13 May 2025
+
+Hello Constantinos, I must confirm that the described scenario cannot be tested with bUnit, because the in-cell edit mode relies heavily on JavaScript for performance and flexibility reasons. You can either test with an e2e test that runs in a browser, or refactor the bUnit test, so that it removes the Grid editing mechanism from the equation. For example, assume that the value in the Grid has updated correctly and just test the algorithm in OnUpdate. We generally recommend to spare the effort to test the built-in features of our components, because we do that ourselves. Regards, Dimo Progress Telerik

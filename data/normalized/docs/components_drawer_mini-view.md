@@ -1,0 +1,46 @@
+
+# Mini View
+
+When the Drawer is collapsed, it is not visible at all by default. You can, however, leave a small hint for the user that shows the icons of the items so they can navigate with just a single action.
+
+To enable the mini view when the drawer is collapsed (minimized), set the `MiniMode` parameter to `true`. By default this parameter is set to `false`.
+
+>caption Mini View behavior
+
+![drawer expanded example](images/drawer-mini-mode-overview.jpg)
+
+>caption Observe the behavior of the MiniMode.
+
+````RAZOR
+@* Click on the Toggle MiniMode button to enable or disable it. *@
+@* The same behavior will be observed in both Push and Overlay modes *@
+
+<TelerikButton OnClick="@(() => DrawerRef.ToggleAsync())" Icon="@SvgIcon.Menu">Toggle drawer</TelerikButton>
+<TelerikButton OnClick="@(() => MiniMode = !MiniMode)">Toggle MiniMode</TelerikButton>
+<TelerikDrawer Data="@Data"
+               MiniMode="@MiniMode"
+               Mode="@DrawerMode.Push"
+               @ref="@DrawerRef">
+</TelerikDrawer>
+
+@code {
+    public TelerikDrawer<DrawerItem> DrawerRef { get; set; }
+    public bool MiniMode { get; set; } = true;
+    public IEnumerable<DrawerItem> Data { get; set; } =
+        new List<DrawerItem>
+            {
+            new DrawerItem { Text = "Counter", Icon = SvgIcon.Plus },
+            new DrawerItem { Text = "FetchData", Icon = SvgIcon.GridLayout },
+            };
+
+    public class DrawerItem
+    {
+        public string Text { get; set; }
+        public ISvgIcon Icon { get; set; }
+    }
+}
+````
+
+## See Also
+
+* [Drawer Mini View Demo](https://demos.telerik.com/blazor-ui/drawer/mini)

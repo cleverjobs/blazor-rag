@@ -1,0 +1,603 @@
+
+# Breaking Changes in 3.0.0
+
+## Common Changes
+
+### OnRead
+
+The `OnRead` handlers of all components now expect you to set the data to an **event argument** instead of the component `Data` attribute. This new data binding mechanism will no longer depend on the component life cycle and will allow new features, which could not be supported in the past (such as Excel export of all pages with `OnRead`).
+
+Note the following changes when using manual data operations:
+
+- Set the `TItem` attribute of the component. This will provide information about the model type, instead of `Data`.
+- Set the `TValue` attribute for **ComboBox**, **DropDownList** and **MultiSelect**.
+- Do not set the `Data` attribute. Instead, set `args.Data` (`IEnumerable`) in the `OnRead` handler.
+- There is no need to cast the items returned by `ToDataSourceResult()` when setting `args.Data`.
+- Do not set `TotalCount`. This attribute is now removed in favor of the `args.Total` event argument (`int`) in the `OnRead` handler.
+- Aggregates over all the data are now supported via `args.AggregateResults` (`IEnumerable<AggregateResult>`). The `AggregateResults` event argument is exposed only for components that support aggregates. [If the Grid is bound to `DataTable`, a workaround is still necessary](slug:grid-kb-aggregates-and-datatable).
+- If you have cached the `DataSourceRequest` object in order to set `Data` later, the new approach is to [reset the Grid state, so that `OnRead` is called again](slug:grid-refresh-data#call-onread).
+- Binding to `ObservableData` via `OnRead` is no longer supported.
+- UI for Blazor **3.0.1** introduced a `Rebind` method that triggers `OnRead` for on-demand data updates. Here is a [rebind example for the Grid](slug:grid-refresh-data#rebind-method) and a similar one [for the ComboBox](slug:combobox-refresh-data#rebind-method).
+
+>caption OnRead Usage in UI for Blazor up to version 2.30 and after version 3.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 2.30</th>
+<th>UI for Blazor 3.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="vertical-align:top">
+
+````RAZOR.skip-repl
+<TelerikComboBox Data="@ComboData"
+                 OnRead="@OnComboRead"
+                 TotalCount="@ComboTotal" />
+
+<TelerikGrid Data="@GridData"
+             OnRead="@OnGridRead"
+             TotalCount="@GridTotal" />
+````
+
+````RAZOR.skip-repl
+
+List<Product> SourceData { get; set; } = new();
+List<Product> ComboData { get; set; }
+List<Product> GridData { get; set; }
+int ComboTotal { get; set; } = 0;
+int GridTotal { get; set; } = 0;
+protected void OnComboRead(ComboBoxReadEventArgs args)
+{
+    var result = SourceData.ToDataSourceResult(args.Request);
+    ComboData = result.Data.Cast<Product>().ToList();
+    ComboTotal = result.Total;
+}
+protected void OnGridRead(GridReadEventArgs args)
+{
+    var result = SourceData.ToDataSourceResult(args.Request);
+    GridData = result.Data.Cast<Product>().ToList();
+    GridTotal = result.Total;
+    // aggregates N/A
+}
+````
+</td>
+<td style="vertical-align:top">
+
+````RAZOR.skip-repl
+<TelerikComboBox TItem="@Product"
+                 TValue="@int"
+                 OnRead="@OnComboRead" />
+
+<TelerikGrid TItem="@Product"
+             OnRead="@OnGridRead" />
+
+````
+
+````RAZOR.skip-repl
+
+List<Product> SourceData { get; set; } = new();
+protected void OnComboRead(ComboBoxReadEventArgs args)
+{
+    var result = SourceData.ToDataSourceResult(args.Request);
+    args.Data = result.Data;
+    args.Total = result.Total;
+}
+protected void OnGridRead(GridReadEventArgs args)
+{
+    var result = SourceData.ToDataSourceResult(args.Request);
+    args.Data = result.Data;
+    args.Total = result.Total;
+    args.AggregateResults = result.AggregateResults;
+}
+
+ 
+
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+### Popup Settings
+
+- `PopupClass`, `PopupHeight` and `PopupWidth` attributes are removed in favor of a nested popup settings tag. Applies to **AutoComplete**, **ComboBox**, **DropDownList** and **MultiSelect**. The nested tag name depend on the component name.
+
+>caption Popup configuration in UI for Blazor up to version 2.30 and after version 3.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 2.30</th>
+<th>UI for Blazor 3.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikComboBox PopupClass="my-class"
+                 PopupHeight="200px"
+                 PopupWidth="150px">
+
+</TelerikComboBox>
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikComboBox>
+    <ComboBoxSettings>
+        <ComboBoxPopupSettings Class="my-class"
+                               Height="200px"
+                               Width="150px" />
+    </ComboBoxSettings>
+</TelerikComboBox>
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+### Other Common Changes
+
+- [`ToODataString` extension method](slug:Telerik.Blazor.Extensions.DataSourceExtensions) is moved to the [`Telerik.Blazor.Extensions` namespace](slug:Telerik.Blazor.Extensions). The `Telerik.Blazor.ExtensionMethods` namespace is removed in favor of `Telerik.Blazor.Extensions`.
+- [`Telerik.Blazor.IconName` class](slug:common-kb-migration-from-iconname) ([obsolete since version 2.0](slug:changes-in-2-0-0)) is removed. Use the icon names from the [Built-in Icons documentation](slug:common-features-icons#icons-list).
+
+## Component Changes
+
+### Grid
+
+- Changed `GridEditMode` enum default value from `Inline` to `None`. Grid editing should be explicitly enabled for the `Add` and `Edit` command buttons to work.
+- Changed the popup edit form orientation to vertical. This is now consistent will the default [`TelerikForm` `Orientation`](slug:form-orientation) and the popup edit forms in all components. [UI for Blazor 3.1](https://www.telerik.com/support/whats-new/blazor-ui/roadmap) will provide popup configuration settings.
+- Use `IFilterDescriptor` to work with the [Grid state](slug:grid-state), instead of `FilterDescriptorBase`.
+- Removed method `ExportToExcel()` (`MemoryStream`) in favor of `ExportToExcelAsync()` (`Task<MemoryStream> `).
+- Removed method `ExportToCsv()` (`MemoryStream`) in favor of `ExportToCsvAsync()` (`Task<MemoryStream> `).
+
+>caption Grid export stream in UI for Blazor up to version 2.30 and after version 3.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 2.30</th>
+<th>UI for Blazor 3.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````C#.skip-repl
+TelerikGrid<GridModel> GridRef { get; set; }
+
+void ExportToExcel()
+{
+    var exportStream = GridRef.ExportToExcel();
+}
+
+void ExportToCsv()
+{
+    var exportStream = GridRef.ExportToCsv();
+}
+
+````
+
+</td>
+<td>
+
+````C#.skip-repl
+TelerikGrid<GridModel> GridRef { get; set; }
+
+async Task ExportToExcel()
+{
+    var exportStream = await GridRef.ExportToExcelAsync();
+}
+
+async Task ExportToCsv()
+{
+    var exportStream = await GridRef.ExportToCsvAsync();
+}
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+- Removed `ExpandedRows` (`ICollection<int>`) in favor of `ExpandedItems` (`ICollection<TItem>`) in the [GridState](slug:Telerik.Blazor.Components.GridState-1). `ExpandedItems` expects items, instead of item indexes. Also, the `PropertyName` argument in the [`OnStateChanged` event](slug:grid-state#events) changes from `"ExpandedRows"` to `"ExpandedItems"` in hierarchy scenarios.
+
+>caption Expand Grid rows in UI for Blazor up to version 2.30 and after version 3.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 2.30</th>
+<th>UI for Blazor 3.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````C#.skip-repl
+List<GridModel> GridData { get; set; }
+
+async Task OnGridStateInit(GridStateEventArgs<GridModel> args)
+{
+    // expand first Grid row
+    args.GridState.ExpandedRows =
+        new List<int> { 0 };
+}
+
+````
+
+</td>
+<td>
+
+````C#.skip-repl
+List<GridModel> GridData { get; set; }
+
+async Task OnGridStateInit(GridStateEventArgs<GridModel> args)
+{
+    // expand first Grid row
+    args.GridState.ExpandedItems =
+        new List<GridModel> { GridData.FirstOrDefault() };
+}
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+### Other Components
+
+- **Button** - removed `Primary` parameter in favor of [`ThemeColor`](slug:components/button/overview) of type `string`. There is a new static class `Telerik.Blazor.ThemeConstants.Button.ThemeColor` with a predefined set of theme colors. To get the old primary Button styling, set `ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"`.
+
+>caption Primary Button style in UI for Blazor up to version 2.30 and after version 3.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 2.30</th>
+<th>UI for Blazor 3.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikButton
+    Primary="true" />
+
+    
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikButton
+    ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" />
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+- **DateInput** – removed `ParsingErrorMessage` (obsolete since version 2.8) in favor of `DateInput_ParsingErrorMessage` [localization string](slug:globalization-localization).
+
+- **Loader**, **LoaderContainer** - changed [`Size` parameter](slug:loader-appearance#size) type from `LoaderSize` enum to `string` (example below). The default value of `Size` is `ThemeConstants.Loader.Size.Medium`. There is a new static class `Telerik.Blazor.ThemeConstants.Loader.Size` with a predefined set of size properties.
+- **Notification**, **Loader**, **LoaderContainer** - changed [`ThemeColor` parameter](slug:loader-appearance#themecolor) type from `ThemeColors` enum to `string`. The default value of `ThemeColor` is `ThemeConstants.Loader.ThemeColor.Primary`. There is a new static class `Telerik.Blazor.ThemeConstants.Loader.ThemeColor` with a predefined set of properties.
+
+>caption Loader and LoaderContainer in UI for Blazor up to version 2.30 and after version 3.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 2.30</th>
+<th>UI for Blazor 3.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikLoader
+    Size="@LoaderSize.Large"
+    ThemeColor="@ThemeColors.Tertiary" />
+
+<TelerikLoaderContainer
+    Size="@LoaderSize.Large"
+    ThemeColor="@ThemeColors.Tertiary" />
+
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikLoader
+    Size="@ThemeConstants.Loader.Size.Large"
+    ThemeColor="@ThemeConstants.Loader.ThemeColor.Tertiary" />
+
+<TelerikLoaderContainer
+    Size="@ThemeConstants.Loader.Size.Large"
+    ThemeColor="@ThemeConstants.Loader.ThemeColor.Tertiary" />
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+- **TextBox**, **MaskedTextBox**, **TextArea** - `Label` parameter is removed. UI for Blazor **3.1.0** features a standalone [FloatingLabel component](slug:floatinglabel-overview). For UI for Blazor **3.0.0** and **3.0.1**, check the following [KB that shows how to add a label](slug:inputs-kb-floating-label ).
+
+>caption TextBox Label in UI for Blazor up to version 2.30 and after version 3.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 2.30</th>
+<th>UI for Blazor 3.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikTextBox
+    @bind-Value="@Value"
+    Label="First Name*:" />
+
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikFloatingLabel Text="First Name*:">
+    <TelerikTextBox
+        @bind-Value="@Value" />
+</TelerikFloatingLabel>
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+- **TileLayout** - introduced optional `Id` attribute for the `TileLayoutItem`. The `OnResize` event handler will receive argument of type `TileLayoutResizeEventArgs`. The `OnReorder` event handler will receive argument of type `TileLayoutReorderEventArgs`. Both event arguments will point to the tile item (`args.Id`) and define if the component should re-render after the event (`args.ShouldRender`).
+
+>caption TileLayout resize and reorder events in UI for Blazor up to version 2.30 and after version 3.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 2.30</th>
+<th>UI for Blazor 3.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikTileLayout Resizable="true"
+                   Reorderable="true"
+                   OnReorder="@OnReorderHandler"
+                   OnResize="@OnResizeHandler">
+    <TileLayoutItems>
+        <TileLayoutItem />
+    </TileLayoutItems>
+</TelerikTileLayout>
+
+@code {
+    void OnResizeHandler()
+    {
+
+    }
+    void OnReorderHandler()
+    {
+
+    }
+}
+
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikTileLayout Resizable="true"
+                   Reorderable="true"
+                   OnReorder="@OnReorderHandler"
+                   OnResize="@OnResizeHandler">
+    <TileLayoutItems>
+        <TileLayoutItem Id="tile1" />
+    </TileLayoutItems>
+</TelerikTileLayout>
+
+@code {
+    void OnResizeHandler(TileLayoutResizeEventArgs args)
+    {
+        if (args.Id == "tile1")
+        {
+            // ...
+        }
+    }
+    void OnReorderHandler(TileLayoutReorderEventArgs args)
+    {
+        if (args.Id == "tile1")
+        {
+            // ...
+        }
+    }
+}
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+- **TreeList** - changed `TreeListEditMode` enum default value from `Inline` to `None`. TreeList editing should be explicitly enabled for the `Add` and `Edit` command buttons to work.
+- **TreeList** - changed the popup edit form orientation to vertical. This is now consistent will the default [`TelerikForm` `Orientation`](slug:form-orientation) and the popup edit forms of all components. [UI for Blazor 3.1](https://www.telerik.com/support/whats-new/blazor-ui/roadmap) will provide popup configuration settings.
+
+- **TreeView** - removed `ExpandedField` parameter in favor of `ExpandedItems` (`IEnumerable<object>`). The expanded state of TreeView items will no longer depend on a model property. `ExpandedItems` supports two-way binding.
+
+>caption TreeView expanded items in UI for Blazor up to version 2.30 and after version 3.0
+
+<table>
+<thead><tr>
+<th>UI for Blazor 2.30</th>
+<th>UI for Blazor 3.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````RAZOR.skip-repl
+<TelerikTreeView Data="@TreeData">
+
+    <TreeViewBindings>
+        <TreeViewBinding ExpandedField="IsExpanded" />
+    </TreeViewBindings>
+</TelerikTreeView>
+````
+
+````RAZOR.skip-repl
+
+IEnumerable<TreeItem> TreeData { get; set; }
+
+protected override void OnInitialized()
+{
+    // expanded items depend on
+    // the IsExpanded value of each item
+}
+public class TreeItem
+{
+    public bool IsExpanded { get; set; }
+}
+
+````
+
+</td>
+<td>
+
+````RAZOR.skip-repl
+<TelerikTreeView Data="@TreeData"
+                 @bind-ExpandedItems="@ExpandedItems">
+    <TreeViewBindings>
+        <TreeViewBinding />
+    </TreeViewBindings>
+</TelerikTreeView>
+````
+
+````RAZOR.skip-repl
+
+IEnumerable<TreeItem> TreeData { get; set; }
+IEnumerable<object> ExpandedItems { get; set; }
+    = new List<TreeItem>();
+protected override void OnInitialized()
+{
+    // expanded items depend on
+    ExpandedItems = TreeData.Where(x => x.HasChildren == true).ToList();
+}
+public class TreeItem
+{
+}
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+- **Window** - changed `Size` parameter type from `WindowSize` enum to `string`. There is a new static class `Telerik.Blazor.ThemeConstants.Window.Size` with a predefined set of size properties. To maintain the old behavior, set the Window `Width` to `300px`, `800px` or `1200px`.
+
+## Parameter Names
+
+We are making our API naming more consistent.
+
+- **Drawer** - `Content` RenderFragment is renamed to [`DrawerContent`](slug:drawer-overview)
+- **Drawer** - `IsSeparatorField` parameter (obsolete since version 2.27) is removed in favor of [`SeparatorField`](slug:drawer-data-binding)
+- **Editor** - `UpdateInterval` parameter is renamed to `DebounceDelay`
+- **Stepper** - `IsCanceled` property in `StepperStepChangeEventArgs` (obsolete since version 2.26) is removed in favor of `IsCancelled`
+
+## Rendering and Themes
+
+>important The [HTML rendering and CSS classes have been updated for multiple components](https://www.telerik.com/blogs/improvements-coming-telerik-kendo-ui-themes-2022), including Buttons, Textbox components, Dropdown components, Date/Time Pickers, Checkbox, Switch. [Recreate any custom themes](slug:themes-customize).
+
+### CSS Classes for State
+
+Some CSS classes related to component state were renamed.
+
+|UI for Blazor 2.30|UI for Blazor 3.0|
+|----|----|
+|`k-state-disabled`|`k-disabled`|
+|`k-state-focused`|`k-focus`|
+|`k-state-invalid`|`k-invalid`|
+|`k-state-selected`|`k-selected`|
+
+### k-widget Class
+
+The `k-widget` CSS class was removed from all components. If you use this class in custom CSS code, replace it with the corresponding component-specific classes.
+
+<table>
+<thead><tr>
+<th>UI for Blazor 2.30</th>
+<th>UI for Blazor 3.0</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+
+````HTML.skip-repl
+<div class="k-widget k-grid"></div>
+<span class="k-widget k-combobox"></span>
+
+<style>
+    .foo .k-widget {
+        /* ... */
+    }
+
+</style>
+````
+
+</td>
+<td>
+
+````HTML.skip-repl
+<div class="k-grid"></div>
+<span class="k-combobox"></span>
+
+<style>
+    .foo .k-grid,
+    .foo .k-combobox {
+        /* ... */
+    }
+</style>
+````
+
+</td>
+</tr>
+</tbody>
+</table>
+
+### Component Widths
+
+- Dropdown components – removed the default inline style of `width: 300px`. The new default width is `100%` and comes from the theme CSS. Applies to **AutoComplete**, **ComboBox**, **DropDownList**, **MultiSelect**.
+- Textbox components - changed the default theme width from `12.4em` to `100%`. Applies to **DateInput**, **Date/Time Picker**, **MaskedTextBox**, **NumericTextBox**, **TextArea**, **TextBox**.
+
+### Input Rendering
+
+- Textbox and dropdown components have new consistent HTML rendering. Note the `k-input` CSS class, which is now used for the outer component element, instead of the `<input>`.
+
+<div class="skip-repl"></div>
+    ````HTML
+    <span class="k-[COMPONENT] k-input"> <!-- k-picker instead of k-input for the DropDownList -->
+        <input class="k-input-inner" /> <!-- SPAN element instead of INPUT for the DropDownList -->
+        <button class="k-input-button [BUTTON CLASSES]"><!-- button here if needed--></button>
+    </span>
+    ````
+
+## REPL Changes
+
+<a href = "https://blazorrepl.telerik.com/" target = "_blank">Telerik REPL for Blazor</a> always uses the latest official version of the `Telerik.UI.for.Blazor` NuGet package.
+
+>important Any snippet created before `Telerik.UI.for.Blazor` version 3.0 (January 19, 2022) may need an update due to the above list of changes.
