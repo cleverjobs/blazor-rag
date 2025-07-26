@@ -1,0 +1,3 @@
+[submodule "data/raw/docs"]
+	path = data/raw/docs
+	url = https://github.com/telerik/blazor-docs.git
