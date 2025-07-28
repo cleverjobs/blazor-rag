@@ -35,10 +35,11 @@ sh ./run.sh
 - raw data from forum (html) and docs (md)
 - normalized data - all md file
 - manifests are in jsonl format for easy ingestion
+- snapshots contain qdrant vector database backups for quick restoration (~244MB with git LFS)
 
 ### scripts
 
-- standalone scripts for data **preparation**
+- standalone scripts for data preparation and vector db management
 
 #### docs
 
@@ -55,4 +56,16 @@ sh ./run.sh
 - all unnecessary HTML content is removed
 
 ```python scripts/scrape_forum.py```
+
 ```python scripts/normalize_forum.py```
+
+#### vector db management
+
+ - backup/restore qdrant collection
+
+```python scripts/create_snapshot.py```
+
+```python scripts/restore_snapshot.py <snapshot_filename>```
+
+## future considerations
+

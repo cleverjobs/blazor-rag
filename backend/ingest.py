@@ -102,14 +102,12 @@ chunker = SentenceWindowNodeParser(
 client = QdrantClient(host=HOST, port=PORT)
 vector_dim = embed_model.get_text_embedding("test").__len__()
 
-if COLLECTION_NAME not in [c.name for c in client.get_collections().collections]:
-    print(f"[ingest] Creating collection '{COLLECTION_NAME}' (dim={vector_dim})")
-    client.recreate_collection(
-        collection_name=COLLECTION_NAME,
-        vectors_config=models.VectorParams(size=vector_dim, distance=models.Distance.COSINE),
-    )
-else:
-    print(f"[ingest] Using existing collection '{COLLECTION_NAME}'")
+# Always recreate collection to ensure correct vector dimensions
+print(f"[ingest] Creating collection '{COLLECTION_NAME}' (dim={vector_dim})")
+client.recreate_collection(
+    collection_name=COLLECTION_NAME,
+    vectors_config=models.VectorParams(size=vector_dim, distance=models.Distance.COSINE),
+)
 
 ###############################################################################
 # Chunk → Embed → Upsert
