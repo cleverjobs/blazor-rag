@@ -18,13 +18,13 @@ git clone https://github.com/cleverjobs/blazor-rag.git
 cd blazor-rag
 ```
 
-- simply run the following command to download all missing dependencies (e.g. llm) and start all containers (takes about 3 minutes on an M1 Mac with 32GB RAM)
+- simply run the following command to download all missing dependencies (e.g. llm) and start all containers (takes about 5 minutes on an M1 Mac with 32GB RAM)
 ```bash
 sh ./run.sh
 ```
 
 - open [http://localhost:3000](http://localhost:3000) in your browser to access the frontend
-- enter a simple question like **"generate blazor button code"** and hit enter
+- enter a simple question like **"generate blazor button code"** and hit enter (response might take about 10 seconds)
 
 ## repo overview
 
