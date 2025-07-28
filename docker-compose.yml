@@ -51,7 +51,9 @@ services:
     depends_on:
       - rag-api
     ports:
-      - "3000:80"
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_CHAT_API_URL=http://localhost:8000/v1/chat
 
 volumes:
   qdrant_storage:
