@@ -1,5 +1,3 @@
-version: "3.9"
-
 # Reviewer configuration with snapshot restoration
 include:
   - docker-compose.base.yml

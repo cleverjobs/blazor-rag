@@ -1,5 +1,3 @@
-version: "3.9"
-
 # Development configuration with full ingestion
 include:
   - docker-compose.base.yml
