@@ -72,7 +72,26 @@ echo "✅ Docker is running"
 
 # Use docker compose if available, fallback to docker-compose
 if docker compose version >/dev/null 2>&1; then
-  docker compose -f docker-compose.stage.yml up --build
+  echo "🚀 Starting services..."
+  docker compose -f docker-compose.stage.yml up --build -d
+  
+  echo "🤖 Pulling Ollama model (llama3.2:1b)..."
+  # Wait for Ollama to be ready, then pull the model
+  until curl -f http://localhost:11434/api/tags >/dev/null 2>&1; do
+    echo "⏳ Waiting for Ollama to start..."
+    sleep 2
+  done
+  
+  echo "📥 Downloading model (this may take a few minutes)..."
+  curl -X POST http://localhost:11434/api/pull -H "Content-Type: application/json" -d '{"name": "llama3.2:1b"}' | grep -E '(status|error)'
+  
+  echo "✅ Setup complete! Services are running."
+  echo "   - Frontend: http://localhost:3000"
+  echo "   - API: http://localhost:8000"
+  echo "   - Qdrant: http://localhost:6333/dashboard"
+  
+  # Follow logs
+  docker compose -f docker-compose.stage.yml logs -f
 else
   docker-compose -f docker-compose.stage.yml up --build
 fi

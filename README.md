@@ -1,5 +1,9 @@
 # blazor rag chatbot
 
+- simple Blazor RAG chatbot using qdrant vector db and fastapi backend
+
+![screenshot](./screenshot.png)
+
 ## how to run
 
 - make sure you have git lfs installed before cloning the repo, in order to download the vector db data
@@ -23,6 +27,13 @@ sh ./run.sh
 ### backend
 
 
+#### cli check
+
+```bash
+curl -X POST http://localhost:8000/v1/chat \
+  -H "Content-Type: application/json" \
+  -d '{"query": "How do I create a simple Blazor button?"}'
+```
 
 ### frontend
 

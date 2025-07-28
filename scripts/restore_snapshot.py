@@ -59,21 +59,26 @@ def restore_snapshot(snapshot_name=None):
         print(f"📊 Restoring collection: {collection_name}")
         
         if is_docker:
-            # In Docker, copy snapshot to tmp directory for Qdrant
+            # In Docker, we need to copy the snapshot to where Qdrant can access it
+            # Qdrant expects snapshots to be accessible via HTTP API
+            # We'll use the REST API to upload and restore
+            import requests
             import shutil
-            qdrant_snapshot_dir = f"/tmp/qdrant_snapshots"
-            os.makedirs(qdrant_snapshot_dir, exist_ok=True)
-            qdrant_snapshot_path = f"{qdrant_snapshot_dir}/{snapshot_name}"
             
-            print("📸 Copying snapshot for Qdrant...")
-            shutil.copy2(snapshot_path, qdrant_snapshot_path)
+            print("📸 Uploading snapshot to Qdrant...")
             
-            # Restore using local path
-            client.recover_snapshot(
-                collection_name=collection_name, 
-                snapshot_name=snapshot_name,
-                snapshot_path=qdrant_snapshot_dir
-            )
+            # Upload snapshot via API
+            upload_url = f"http://{qdrant_url}/collections/{collection_name}/snapshots/upload"
+            
+            with open(snapshot_path, 'rb') as f:
+                files = {'snapshot': f}
+                response = requests.post(upload_url, files=files)
+                
+                if response.status_code == 200:
+                    print("✅ Snapshot uploaded successfully!")
+                else:
+                    print(f"❌ Failed to upload snapshot: {response.status_code} - {response.text}")
+                    return False
         else:
             # Local environment - copy to Qdrant container
             import subprocess
@@ -91,7 +96,7 @@ def restore_snapshot(snapshot_name=None):
             
             # Restore the collection
             print("🔄 Restoring collection from snapshot...")
-            client.recover_snapshot(collection_name=collection_name, snapshot_name=snapshot_name)
+            client.recover_snapshot(collection_name=collection_name, location=snapshot_path)
         
         # Wait a moment for restoration to complete
         time.sleep(5)
