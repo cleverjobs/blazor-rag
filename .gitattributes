@@ -1,0 +1,2 @@
+data/snapshots/*.snapshot filter=lfs diff=lfs merge=lfs -text
+data/snapshots/*.checksum filter=lfs diff=lfs merge=lfs -text
