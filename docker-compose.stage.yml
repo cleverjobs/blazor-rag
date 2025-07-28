@@ -1,0 +1,22 @@
+version: "3.9"
+
+# Reviewer configuration with snapshot restoration
+include:
+  - docker-compose.base.yml
+
+services:
+  # Add snapshot restoration service for reviewers
+  ingest-snapshot:
+    build: ./backend
+    command: python /scripts/restore_snapshot.py
+    environment:
+      - COLLECTION_NAME=telerik_blazor_docs
+      - QDRANT_URL=qdrant:6333
+      - SNAPSHOT_NAME=telerik_blazor_docs-1883480512116257-2025-07-28-10-14-25.snapshot
+    volumes:
+      - ./data:/data
+      - ./scripts:/scripts
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    restart: "no"  # Only run once

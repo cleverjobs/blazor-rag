@@ -15,7 +15,7 @@ sh ./run.sh
 
 ## repo overview
 
-- frontend is a static chatbot ui hosted on nginx
+- frontend is a nextjs/react app
 - backend is a fastapi server with qdrant vector db
 - scripts are for data preparation
 - data contains raw and normalized data
@@ -26,9 +26,9 @@ sh ./run.sh
 
 ### frontend
 
-- generated with firebase studio ([https://studio.firebase.google.com/studio-2586733948])
+- generated with firebase studio
 - react + nestjs ssg
-- only static bundle in repo
+- separate public repo that is imported as git submodule
 
 ### data
 

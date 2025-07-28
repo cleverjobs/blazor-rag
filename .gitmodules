@@ -1,7 +1,10 @@
 [submodule "data/raw/docs"]
 	path = data/raw/docs
 	url = https://github.com/telerik/blazor-docs.git
+	branch = master
 
 [submodule "frontend"]
 	path = frontend
 	url = git@github.com:cleverjobs/blazor-chatbot.git
+	branch = master
+
