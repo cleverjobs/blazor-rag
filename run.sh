@@ -2,6 +2,9 @@
 
 set -e  # Exit on any error
 
+# Start timer
+START_TIME=$(date +%s)
+
 echo "🚀 Starting RAG Scaffold Stage Environment..."
 
 # === GIT SUBMODULES SECTION ===
@@ -89,9 +92,18 @@ if docker compose version >/dev/null 2>&1; then
   echo "   - Frontend: http://localhost:3000"
   echo "   - API: http://localhost:8000"
   echo "   - Qdrant: http://localhost:6333/dashboard"
-  
-  # Follow logs
-  docker compose -f docker-compose.stage.yml logs -f
+  echo ""
+  echo "🎉 All services started successfully!"
+  echo "💡 To view logs, run: docker compose -f docker-compose.stage.yml logs -f"
+  echo "🛑 To stop services, run: docker compose -f docker-compose.stage.yml down"
 else
   docker-compose -f docker-compose.stage.yml up --build
 fi
+
+# Calculate and display elapsed time
+END_TIME=$(date +%s)
+ELAPSED=$((END_TIME - START_TIME))
+MINUTES=$((ELAPSED / 60))
+SECONDS=$((ELAPSED % 60))
+echo ""
+echo "⏱️  Total setup time: ${MINUTES}m ${SECONDS}s"
